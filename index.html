@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Trại Huấn Luyện Thám Tử - Học Đa Môn</title>
-    <meta name="description" content="Ứng dụng học Tiếng Anh KET, Toán Lớp 5, Tiếng Trung cho trẻ em">
+    <meta name="description" content="Ứng dụng học 10 môn cho trẻ em">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
     <!-- ========== 1. WELCOME SCREEN ========== -->
     <div id="welcomeScreen" class="screen welcome-screen">
         <div class="welcome-inner">
-            <div class="welcome-badge">🔍</div>
+            <div class="welcome-badge">🕵️‍♂️</div>
             <h1 class="welcome-title">TRẠI HUẤN LUYỆN<br>THÁM TỬ</h1>
-            <p class="welcome-sub">Học vui — Chơi giỏi — Phá án tài!</p>
+            <p class="welcome-sub">Học vui - Chơi giỏi - Phá án tài!</p>
             <div class="child-photo-wrapper" id="startBtn">
-                <img src="images/child.jpg" alt="My Detective" class="child-photo"
+                <img src="images/child.jpg" alt="My Detective" class="child-photo" 
                      onerror="this.style.display='none'; this.parentElement.querySelector('.child-fallback').style.display='flex';" />
-                <div class="child-fallback" style="display:none;"><span style="font-size:4rem;">🕵️</span></div>
+                <div class="child-fallback" style="display:none;"><span style="font-size:4rem;">👦🏻</span></div>
                 <div class="photo-play-icon">▶</div>
             </div>
             <p class="welcome-tap">👆 Nhấn vào ảnh để bắt đầu!</p>
@@ -33,23 +33,46 @@
             <h1 class="subject-heading">Chọn Môn Học</h1>
             <p class="subject-sub">Hôm nay thám tử muốn luyện gì?</p>
             <div class="subject-grid">
-                <button class="subject-card card-english" data-subject="english">
-                    <span class="sc-emoji">🔤</span>
-                    <span class="sc-name">Tiếng Anh</span>
-                    <span class="sc-desc">KET A2 · Conan Style</span>
-                    <span class="sc-progress" id="prog-english">0 🏅</span>
+                <!-- Group 1: Required Subjects (New) -->
+                <button class="subject-card card-vietnamese" data-subject="vietnamese">
+                    <span class="sc-emoji">📝</span>
+                    <span class="sc-name">Tiếng Việt</span>
+                    <span class="sc-desc">Chính tả, từ và câu</span>
                 </button>
                 <button class="subject-card card-math" data-subject="math">
                     <span class="sc-emoji">🔢</span>
-                    <span class="sc-name">Toán Lớp 5</span>
-                    <span class="sc-desc">Hình học · Đại số</span>
-                    <span class="sc-progress" id="prog-math">0 🏅</span>
+                    <span class="sc-name">Toán Học</span>
+                    <span class="sc-desc">Đại số, hình học</span>
+                </button>
+                <button class="subject-card card-science" data-subject="science">
+                    <span class="sc-emoji">🔬</span>
+                    <span class="sc-name">Khoa Học</span>
+                    <span class="sc-desc">Tự nhiên, môi trường</span>
+                </button>
+                <button class="subject-card card-history" data-subject="history">
+                    <span class="sc-emoji">🗺️</span>
+                    <span class="sc-name">Lịch Sử - Địa Lí</span>
+                    <span class="sc-desc">Việt Nam & Thế giới</span>
+                </button>
+                <button class="subject-card card-ethics" data-subject="ethics">
+                    <span class="sc-emoji">🤝</span>
+                    <span class="sc-name">Đạo Đức</span>
+                    <span class="sc-desc">Bài học làm người</span>
+                </button>
+                <button class="subject-card card-informatics" data-subject="informatics">
+                    <span class="sc-emoji">💻</span>
+                    <span class="sc-name">Tin Học & Công Nghệ</span>
+                    <span class="sc-desc">Máy tính, ứng dụng</span>
+                </button>
+                <button class="subject-card card-english" data-subject="english">
+                    <span class="sc-emoji">🔤</span>
+                    <span class="sc-name">Ngoại Ngữ 1</span>
+                    <span class="sc-desc">Tiếng Anh KET</span>
                 </button>
                 <button class="subject-card card-chinese" data-subject="chinese">
                     <span class="sc-emoji">🀄</span>
-                    <span class="sc-name">Tiếng Trung</span>
-                    <span class="sc-desc">Từ vựng · Pinyin</span>
-                    <span class="sc-progress" id="prog-chinese">0 🏅</span>
+                    <span class="sc-name">Ngoại Ngữ 2</span>
+                    <span class="sc-desc">Tiếng Trung (Pinyin)</span>
                 </button>
             </div>
             <button id="backToWelcome" class="btn btn-ghost" style="margin-top:16px;">← Về Trang Chủ</button>
@@ -62,30 +85,25 @@
             <h1 class="subject-heading">Chuyên Đề Toán Lớp 5</h1>
             <p class="subject-sub">Chọn phần bé đã học ở trường nhé</p>
             <div class="subject-grid">
+                <button class="subject-card card-math" data-math-cat="fractions">
+                    <span class="sc-emoji">🍕</span>
+                    <span class="sc-name">Phân Số & Hỗn Số</span>
+                    <span class="sc-desc">Cộng/Trừ, Rút gọn</span>
+                </button>
                 <button class="subject-card card-math" data-math-cat="decimals">
                     <span class="sc-emoji">🔢</span>
                     <span class="sc-name">Số Thập Phân</span>
                     <span class="sc-desc">Cộng/Trừ/Nhân/Chia</span>
-                </button>
-                <button class="subject-card card-math" data-math-cat="percentage">
-                    <span class="sc-emoji">📊</span>
-                    <span class="sc-name">Tỉ Số Phần Trăm</span>
-                    <span class="sc-desc">Tính %, giảm giá...</span>
-                </button>
-                <button class="subject-card card-math" data-math-cat="motion">
-                    <span class="sc-emoji">🚗</span>
-                    <span class="sc-name">Chuyển Động</span>
-                    <span class="sc-desc">Vận tốc, quãng đường</span>
                 </button>
                 <button class="subject-card card-math" data-math-cat="geometry_flat">
                     <span class="sc-emoji">📐</span>
                     <span class="sc-name">Hình Học Phẳng</span>
                     <span class="sc-desc">Tam giác, hình thang, tròn</span>
                 </button>
-                <button class="subject-card card-math" data-math-cat="geometry_space">
-                    <span class="sc-emoji">📦</span>
-                    <span class="sc-name">Hình Không Gian</span>
-                    <span class="sc-desc">Thể tích hình hộp, lập phương</span>
+                <button class="subject-card card-math" data-math-cat="units">
+                    <span class="sc-emoji">⚖️</span>
+                    <span class="sc-name">Đổi Đơn Vị</span>
+                    <span class="sc-desc">m², ha, tấn, tạ, kg...</span>
                 </button>
                 <button class="subject-card card-math" data-math-cat="all">
                     <span class="sc-emoji">🎲</span>
@@ -100,72 +118,80 @@
     <!-- ========== 3. EXERCISE SCREEN ========== -->
     <div id="exerciseScreen" class="screen hidden">
         <div class="exercise-wrap">
-            <header class="ex-topbar">
-                <button id="backToSubjects" class="btn btn-ghost btn-sm">← Đổi Môn</button>
-                <span class="ex-subject-badge" id="currentSubjectBadge">🔤 Tiếng Anh</span>
-            </header>
+            <!-- Header -->
+            <div class="ex-header">
+                <button id="backToSubjects" class="btn btn-ghost">← Thoát</button>
+                <div id="currentSubjectBadge" class="ex-subject-badge badge-english">🔤 Môn Học</div>
+            </div>
 
-            <!-- Dashboard -->
-            <div class="dashboard">
-                <div class="dash-card">
-                    <div class="dash-icon">🛡️</div>
-                    <div class="dash-value" id="pointsDisplay">0</div>
-                    <div class="dash-label">Điểm</div>
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar-wrap">
+                    <div id="progressBar" class="progress-bar"></div>
                 </div>
-                <div class="dash-card">
-                    <div class="dash-icon">🏅</div>
-                    <div class="dash-value" id="badgesDisplay">0/50</div>
-                    <div class="dash-label" id="rankDisplay">Thám Tử Nhí</div>
-                    <div class="progress-wrap">
-                        <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
-                        <div class="progress-labels"><span>Tiến trình</span><span id="progressPercent">0%</span></div>
-                    </div>
+                <div class="progress-stats">
+                    <span class="stat-pill"><span id="pointsDisplay">0</span> 💰 Điểm</span>
+                    <span class="stat-pill"><span id="badgesDisplay">0/50</span> 🏅</span>
+                    <span class="stat-pill">Cấp: <span id="rankDisplay">Nhí</span></span>
+                    <span class="stat-pill" id="progressPercent">0%</span>
                 </div>
             </div>
 
-            <!-- Exercise Card -->
-            <div class="card exercise-card">
-                <!-- Visual / Emoji illustration -->
-                <div class="ex-visual" id="exVisual" style="display:none;">
-                    <span id="exVisualEmoji" style="font-size:4rem;"></span>
+            <!-- Main Case Box -->
+            <div class="case-box">
+                <div class="avatar-wrap">
+                    <div id="exAvatar" class="avatar-circle">🕵️</div>
                 </div>
+                <div class="case-content">
+                    <div id="caseType" class="case-tag">Dạng Bài</div>
+                    <h3 id="caseTitle" class="case-title">Tiêu Đề</h3>
+                    <div class="visual-clue hidden" id="exVisual">
+                        <span id="exVisualEmoji" style="font-size:3rem;"></span>
+                    </div>
+                    <p id="caseDialogue" class="case-dialogue">Nội dung câu hỏi</p>
+                    <button id="speechBtn" class="btn btn-circle" title="Nghe phát âm" style="display:none;">🔊</button>
+                </div>
+            </div>
 
-                <div class="ex-header">
-                    <div class="ex-avatar" id="exAvatar">🕵️</div>
-                    <div class="ex-meta">
-                        <span class="ex-tag" id="caseType">Ngữ pháp</span>
-                        <h2 class="ex-title" id="caseTitle">Vụ Án Bí Ẩn</h2>
+            <!-- Action Area -->
+            <div class="action-area">
+                
+                <!-- MULTIPLE CHOICE CONTAINER -->
+                <div id="mcqContainer" class="mcq-container hidden">
+                    <div class="mcq-grid" id="mcqGrid">
+                        <!-- Buttons injected via JS -->
                     </div>
                 </div>
 
-                <div class="dialogue-bubble">
-                    <span id="caseDialogue">Bấm nút bên dưới để nhận câu hỏi mới!</span>
-                    <button type="button" id="speechBtn" class="speak-btn" title="Nghe phát âm">🔊</button>
-                </div>
-
-                <!-- Chinese character display (shown after answer) -->
-                <div id="hanziBox" class="hanzi-box hidden">
-                    <span id="hanziChar" class="hanzi-char"></span>
-                    <span id="hanziPinyin" class="hanzi-pinyin"></span>
-                </div>
-
-                <form id="answerForm" class="answer-area">
-                    <label class="answer-label" id="answerLabel">Gõ đáp án:</label>
-                    <div class="answer-row">
-                        <input type="text" id="answerInput" class="answer-input" placeholder="Nhập đáp án…" autocomplete="off" autocapitalize="none" />
-                        <button type="submit" id="submitBtn" class="btn btn-red">Trả lời</button>
+                <!-- TEXT INPUT CONTAINER -->
+                <form id="answerForm" class="answer-form">
+                    <label id="answerLabel" for="answerInput">Gõ đáp án vào đây:</label>
+                    <div class="input-group">
+                        <input type="text" id="answerInput" autocomplete="off" placeholder="...">
+                        <button type="button" id="hintBtn" class="btn btn-hint" title="Gợi ý">💡</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">Trả Lời</button>
                     </div>
-                    <div class="hint-row">
-                        <button type="button" id="hintBtn" class="btn btn-outline-sm">💡 Gợi ý</button>
-                        <span id="hintDisplay" class="hint-text"></span>
-                    </div>
+                    <div id="hintDisplay" class="hint-display"></div>
                 </form>
-
-                <div id="feedbackBox" class="feedback hidden"><span id="feedbackText"></span></div>
-                <div id="explanationBox" class="explanation hidden"><strong>📖 Giải thích:</strong><p id="caseExplanation"></p></div>
-                <div id="nextActionBox" class="next-action hidden">
-                    <button type="button" id="nextCaseBtn" class="btn btn-navy btn-full">🔍 Câu Tiếp Theo</button>
+                
+                <!-- Chinese Hanzi Box -->
+                <div id="hanziBox" class="hanzi-box hidden">
+                    <div id="hanziChar" class="hanzi-char"></div>
+                    <div id="hanziPinyin" class="hanzi-pinyin"></div>
                 </div>
+
+                <!-- Feedback & Next Button -->
+                <div id="feedbackBox" class="feedback-box hidden">
+                    <div id="feedbackText" class="feedback-text"></div>
+                </div>
+                <div id="explanationBox" class="explanation-box hidden">
+                    <strong>💡 Giải thích:</strong>
+                    <div id="caseExplanation"></div>
+                </div>
+                <div id="nextActionBox" class="next-action-box hidden">
+                    <button type="button" id="nextCaseBtn" class="btn btn-navy btn-full">⏭️ CÂU TIẾP THEO</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -186,6 +212,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>
