@@ -318,16 +318,20 @@ if (isFirebaseReady) {
         const pass = authPassword.value;
         authError.classList.add('hidden');
         
-        // Thử đăng nhập, nếu thất bại do chưa có tài khoản thì tạo mới
+        // Thử đăng nhập
         auth.signInWithEmailAndPassword(email, pass)
             .catch(error => {
-                if (error.code === 'auth/user-not-found') {
-                    // Đăng ký mới
-                    auth.createUserWithEmailAndPassword(email, pass)
-                        .catch(err => { authError.textContent = "Lỗi tạo tài khoản: " + err.message; authError.classList.remove('hidden'); });
-                } else {
-                    authError.textContent = "Sai mật khẩu hoặc lỗi: " + error.message; authError.classList.remove('hidden');
-                }
+                // Do Firebase mới bật bảo mật chống dò email, nó sẽ không báo lỗi 'user-not-found' nữa.
+                // Nên ta sẽ thử Đăng ký mới luôn. Nếu thất bại vì 'email-already-in-use' thì chứng tỏ là sai mật khẩu.
+                auth.createUserWithEmailAndPassword(email, pass)
+                    .catch(err => {
+                        if (err.code === 'auth/email-already-in-use') {
+                            authError.textContent = "Sai mật khẩu. Vui lòng nhập lại!";
+                        } else {
+                            authError.textContent = "Lỗi hệ thống: " + err.message;
+                        }
+                        authError.classList.remove('hidden');
+                    });
             });
     });
 } else {
