@@ -218,7 +218,7 @@ const CORRECT_PER_BADGE = 20;
 
 // ⚠️ ĐÃ ĐIỀN MÃ FIREBASE THẬT ⚠️
 const firebaseConfig = {
-    apiKey: "AIzaSyAzuZWkSLCo8hTZrNfqhlDohGL07LQww0A",
+    apiKey: "AIzaSyAzuZWkSLCo8hTZrNfqh1DohGLO7LQwwOA",
     authDomain: "chuongtrinhlop5keeko.firebaseapp.com",
     projectId: "chuongtrinhlop5keeko",
     storageBucket: "chuongtrinhlop5keeko.firebasestorage.app",
