@@ -2,165 +2,149 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detective Conan English Camp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trại Huấn Luyện Thám Tử - Học Đa Môn</title>
+    <meta name="description" content="Ứng dụng học Tiếng Anh KET, Toán Lớp 5, Tiếng Trung cho trẻ em">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* Utility classes for hiding/showing screens */
-        .hidden { display: none !important; }
-        .hint-text { letter-spacing: 2px; font-weight: bold; color: var(--color-primary); font-family: monospace; font-size: 1.2rem; }
-    </style>
 </head>
 <body>
 
-    <!-- Welcome Screen -->
-    <div id="welcomeScreen" class="welcome-screen animate-fade-in">
-        <div class="welcome-card glass-panel">
-            <h1 style="color: var(--color-primary); margin-bottom: 20px;">
-                TRẠI HUẤN LUYỆN THÁM TỬ
-            </h1>
-            
-            <div class="image-container" id="startBtn" style="cursor: pointer;">
-                <img src="images/child.jpg" alt="My Detective" class="child-hero-image" onerror="this.src='https://upload.wikimedia.org/wikipedia/vi/a/aa/Conan_Edogawa.jpg'" />
-                <div class="play-overlay">
-                    <i data-lucide="play" style="color: white; width: 64px; height: 64px;"></i>
-                </div>
+    <!-- ========== 1. WELCOME SCREEN ========== -->
+    <div id="welcomeScreen" class="screen welcome-screen">
+        <div class="welcome-inner">
+            <div class="welcome-badge">🔍</div>
+            <h1 class="welcome-title">TRẠI HUẤN LUYỆN<br>THÁM TỬ</h1>
+            <p class="welcome-sub">Học vui — Chơi giỏi — Phá án tài!</p>
+            <div class="child-photo-wrapper" id="startBtn">
+                <img src="images/child.jpg" alt="My Detective" class="child-photo"
+                     onerror="this.style.display='none'; this.parentElement.querySelector('.child-fallback').style.display='flex';" />
+                <div class="child-fallback" style="display:none;"><span style="font-size:4rem;">🕵️</span></div>
+                <div class="photo-play-icon">▶</div>
             </div>
-
-            <h2 style="margin-top: 20px; color: var(--color-secondary);">
-                Nhấn vào ảnh để bắt đầu phá án!
-            </h2>
+            <p class="welcome-tap">👆 Nhấn vào ảnh để bắt đầu!</p>
         </div>
     </div>
 
-    <!-- Main App Container -->
-    <div id="mainApp" class="app-container hidden animate-fade-in">
-        <header class="app-header">
-            <h1>
-                <i data-lucide="search" class="badge-icon" style="width: 36px; height: 36px;"></i> 
-                Detective Conan English
-            </h1>
-            <p style="color: var(--color-text-light); font-weight: 600;">
-                Cùng phá án và học tiếng Anh chuẩn KET (A2)
-            </p>
-        </header>
-
-        <!-- Dashboard -->
-        <div class="dashboard-container">
-            <div class="stat-card glass-panel animate-fade-in">
-                <i data-lucide="shield" style="color: var(--color-primary); width: 32px; height: 32px;"></i>
-                <div class="stat-value" id="pointsDisplay">0</div>
-                <div class="stat-label">Điểm Thám Tử</div>
+    <!-- ========== 2. SUBJECT SELECTION ========== -->
+    <div id="subjectScreen" class="screen subject-screen hidden">
+        <div class="subject-inner">
+            <h1 class="subject-heading">Chọn Môn Học</h1>
+            <p class="subject-sub">Hôm nay thám tử muốn luyện gì?</p>
+            <div class="subject-grid">
+                <button class="subject-card card-english" data-subject="english">
+                    <span class="sc-emoji">🔤</span>
+                    <span class="sc-name">Tiếng Anh</span>
+                    <span class="sc-desc">KET A2 · Conan Style</span>
+                    <span class="sc-progress" id="prog-english">0 🏅</span>
+                </button>
+                <button class="subject-card card-math" data-subject="math">
+                    <span class="sc-emoji">🔢</span>
+                    <span class="sc-name">Toán Lớp 5</span>
+                    <span class="sc-desc">Hình học · Đại số</span>
+                    <span class="sc-progress" id="prog-math">0 🏅</span>
+                </button>
+                <button class="subject-card card-chinese" data-subject="chinese">
+                    <span class="sc-emoji">🀄</span>
+                    <span class="sc-name">Tiếng Trung</span>
+                    <span class="sc-desc">Từ vựng · Pinyin</span>
+                    <span class="sc-progress" id="prog-chinese">0 🏅</span>
+                </button>
             </div>
-            
-            <div class="stat-card glass-panel animate-fade-in" style="animation-delay: 0.1s;">
-                <i data-lucide="medal" style="color: var(--color-accent); width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"></i>
-                <div class="stat-value" id="badgesDisplay">0/50</div>
-                <div class="stat-label" id="rankDisplay">Thám Tử Nhí</div>
-                
-                <div class="progress-container">
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressBar" style="width: 0%;"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span>Tiến trình</span>
-                        <span id="progressPercent">0%</span>
-                    </div>
-                </div>
-            </div>
+            <button id="backToWelcome" class="btn btn-ghost" style="margin-top:16px;">← Về Trang Chủ</button>
         </div>
+    </div>
 
-        <!-- Exercise Card -->
-        <div class="glass-panel exercise-card animate-fade-in">
-            <div class="exercise-header">
-                <img id="caseImage" src="https://upload.wikimedia.org/wikipedia/vi/a/aa/Conan_Edogawa.jpg" alt="Conan" class="character-avatar" />
-                <div class="exercise-title">
-                    <span class="exercise-type" id="caseType">Ngữ pháp</span>
-                    <h3 id="caseTitle">Vụ Án Bí Ẩn</h3>
+    <!-- ========== 3. EXERCISE SCREEN ========== -->
+    <div id="exerciseScreen" class="screen hidden">
+        <div class="exercise-wrap">
+            <header class="ex-topbar">
+                <button id="backToSubjects" class="btn btn-ghost btn-sm">← Đổi Môn</button>
+                <span class="ex-subject-badge" id="currentSubjectBadge">🔤 Tiếng Anh</span>
+            </header>
+
+            <!-- Dashboard -->
+            <div class="dashboard">
+                <div class="dash-card">
+                    <div class="dash-icon">🛡️</div>
+                    <div class="dash-value" id="pointsDisplay">0</div>
+                    <div class="dash-label">Điểm</div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-icon">🏅</div>
+                    <div class="dash-value" id="badgesDisplay">0/50</div>
+                    <div class="dash-label" id="rankDisplay">Thám Tử Nhí</div>
+                    <div class="progress-wrap">
+                        <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
+                        <div class="progress-labels"><span>Tiến trình</span><span id="progressPercent">0%</span></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="dialogue-box">
-                <span id="caseDialogue">...</span>
-                <button id="speechBtn" class="speech-btn" title="Nghe">
-                    <i data-lucide="volume-2" style="width: 20px; height: 20px;"></i>
-                </button>
-            </div>
-
-            <form id="answerForm" class="input-form">
-                <p style="margin-bottom: 10px; font-weight: 600; color: var(--color-text);">
-                    Gõ từ điền vào chỗ trống:
-                </p>
-                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <input
-                        type="text"
-                        id="answerInput"
-                        placeholder="Nhập câu trả lời bằng tiếng Anh..."
-                        style="flex: 1; padding: 12px 15px; border-radius: var(--radius-md); border: 2px solid #e2e8f0; font-size: 1.1rem; outline: none; font-family: inherit;"
-                        autocomplete="off"
-                    />
-                    <button type="submit" id="submitBtn" class="btn btn-secondary">
-                        Trả lời <i data-lucide="send" style="width: 18px; height: 18px;"></i>
-                    </button>
+            <!-- Exercise Card -->
+            <div class="card exercise-card">
+                <!-- Visual / Emoji illustration -->
+                <div class="ex-visual" id="exVisual" style="display:none;">
+                    <span id="exVisualEmoji" style="font-size:4rem;"></span>
                 </div>
-                
-                <!-- Hint Section -->
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <button type="button" id="hintBtn" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                        <i data-lucide="help-circle" style="width: 16px; height: 16px;"></i> Gợi ý
-                    </button>
-                    <span id="hintDisplay" class="hint-text"></span>
+
+                <div class="ex-header">
+                    <div class="ex-avatar" id="exAvatar">🕵️</div>
+                    <div class="ex-meta">
+                        <span class="ex-tag" id="caseType">Ngữ pháp</span>
+                        <h2 class="ex-title" id="caseTitle">Vụ Án Bí Ẩn</h2>
+                    </div>
                 </div>
-            </form>
 
-            <div id="feedbackBox" class="answer-feedback animate-fade-in hidden" style="margin-top: 15px; padding: 10px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px; font-weight: bold;">
-                <i id="feedbackIcon" data-lucide="check-circle-2" style="width: 24px; height: 24px;"></i>
-                <span id="feedbackText"></span>
-            </div>
-
-            <div id="explanationBox" class="explanation-box animate-fade-in hidden">
-                <i data-lucide="info" class="explanation-icon" style="width: 24px; height: 24px;"></i>
-                <div class="explanation-content">
-                    <h4>Giải thích</h4>
-                    <p id="caseExplanation">...</p>
+                <div class="dialogue-bubble">
+                    <span id="caseDialogue">Bấm nút bên dưới để nhận câu hỏi mới!</span>
+                    <button type="button" id="speechBtn" class="speak-btn" title="Nghe phát âm">🔊</button>
                 </div>
-            </div>
 
-            <div id="nextActionBox" class="action-area animate-fade-in hidden">
-                <button id="nextCaseBtn" class="btn btn-primary">
-                    Tiếp Tục Điều Tra <i data-lucide="search" style="width: 18px; height: 18px; margin-left: 5px;"></i>
-                </button>
+                <!-- Chinese character display (shown after answer) -->
+                <div id="hanziBox" class="hanzi-box hidden">
+                    <span id="hanziChar" class="hanzi-char"></span>
+                    <span id="hanziPinyin" class="hanzi-pinyin"></span>
+                </div>
+
+                <form id="answerForm" class="answer-area">
+                    <label class="answer-label" id="answerLabel">Gõ đáp án:</label>
+                    <div class="answer-row">
+                        <input type="text" id="answerInput" class="answer-input" placeholder="Nhập đáp án…" autocomplete="off" autocapitalize="none" />
+                        <button type="submit" id="submitBtn" class="btn btn-red">Trả lời</button>
+                    </div>
+                    <div class="hint-row">
+                        <button type="button" id="hintBtn" class="btn btn-outline-sm">💡 Gợi ý</button>
+                        <span id="hintDisplay" class="hint-text"></span>
+                    </div>
+                </form>
+
+                <div id="feedbackBox" class="feedback hidden"><span id="feedbackText"></span></div>
+                <div id="explanationBox" class="explanation hidden"><strong>📖 Giải thích:</strong><p id="caseExplanation"></p></div>
+                <div id="nextActionBox" class="next-action hidden">
+                    <button type="button" id="nextCaseBtn" class="btn btn-navy btn-full">🔍 Câu Tiếp Theo</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Reward Screen -->
-    <div id="rewardScreen" class="reward-screen hidden">
-        <div class="ticket-card animate-shake">
-            <div class="ticket-header">
-                <h2>CHÚC MỪNG THÁM TỬ XUẤT SẮC!</h2>
+    <!-- ========== 4. REWARD SCREEN ========== -->
+    <div id="rewardScreen" class="screen reward-screen hidden">
+        <div class="reward-card">
+            <div class="reward-header"><span style="font-size:3rem;">🌟</span><h2>CHÚC MỪNG THÁM TỬ!</h2></div>
+            <div class="reward-body">
+                <p>Bé đã hoàn thành xuất sắc 50 huy hiệu môn <strong id="rewardSubject"></strong>!</p>
+                <p class="reward-prize">🎫 Tặng 1 vé đi ăn Buffet!</p>
+                <p class="reward-note">(Bố mẹ chụp màn hình này để đổi thưởng nhé)</p>
             </div>
-            <div class="ticket-body">
-                <i data-lucide="star" style="color: #fcd34d; width: 64px; height: 64px; margin-bottom: 20px;"></i>
-                <p>Bé đã hoàn thành xuất sắc khóa huấn luyện KET (A2) với điểm tuyệt đối!</p>
-                <p style="font-weight: bold; color: var(--color-secondary); font-size: 1.5rem;">
-                    Tặng 1 vé đi ăn Buffet!
-                </p>
-                <p style="font-size: 1rem; color: var(--color-text-light);">
-                    (Bố mẹ hãy chụp màn hình này để đổi thưởng nhé)
-                </p>
-            </div>
-            <div class="ticket-footer">
-                <button id="resetAppBtn" class="btn btn-primary">Chơi Lại Từ Đầu</button>
+            <div class="reward-footer">
+                <button type="button" id="resetSubjectBtn" class="btn btn-navy btn-full">Chơi Lại Môn Này</button>
+                <button type="button" id="backToMenuBtn" class="btn btn-ghost btn-full" style="margin-top:8px;">← Về Chọn Môn</button>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
 </body>
 </html>
