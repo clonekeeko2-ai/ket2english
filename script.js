@@ -57,28 +57,117 @@ function generateChinese(){
   };
 }
 
-// 3. MATH GRADE 5
+// 3. MATH GRADE 5 (Advanced)
 function generateMath(category) {
     let T = [];
     if (category === "decimals" || category === "all") {
-        const a = round(randInt(10, 99) + Math.random(), 1), b = round(randInt(1, 9) + Math.random(), 1);
-        T.push({type:"Số thập phân",title:"Phép Cộng",dialogue:`${a} + ${b} = ______`,correct:String(round(a+b, 1)),explanation:`${a} + ${b} = ${round(a+b, 1)}`,visual:"➕"});
+        const x = round(randInt(10, 50) + Math.random(), 2);
+        const y = round(randInt(5, 20) + Math.random(), 2);
+        const sum = round(x + y, 2);
+        T.push({type:"Tìm X",title:"Số thập phân",dialogue:`Tìm X biết: X + ${y} = ${sum}`,correct:String(x),explanation:`X = ${sum} - ${y} = ${x}`,visual:"✖️"});
+        
+        const a = round(randInt(2, 9) + Math.random(), 1);
+        const b = randInt(2, 8);
+        const prod = round(a * b, 1);
+        T.push({type:"Tìm X",title:"Phép Nhân",dialogue:`Tìm X biết: X × ${b} = ${prod}`,correct:String(a),explanation:`X = ${prod} ÷ ${b} = ${a}`,visual:"✖️"});
     }
     if (category === "fractions" || category === "all") {
-        T.push({type:"Phân số",title:"Rút gọn",dialogue:`Rút gọn phân số 15/20 thành tối giản (ví dụ: 3/4):`,correct:"3/4",explanation:`Chia cả tử và mẫu cho 5 ta được 3/4`,visual:"🍕"});
-        T.push({type:"Hỗn số",title:"Chuyển đổi",dialogue:`Chuyển hỗn số 2 1/3 thành phân số (ví dụ: 7/3):`,correct:"7/3",explanation:`Lấy phần nguyên nhân mẫu cộng tử: (2×3+1)/3 = 7/3`,visual:"🍕"});
+        const d1 = pick([2, 3, 4, 5]);
+        const d2 = pick([2, 3, 4, 5].filter(v => v !== d1));
+        const lcd = d1 * d2;
+        const n1 = randInt(1, d1-1);
+        const n2 = randInt(1, d2-1);
+        const nSum = (n1 * d2) + (n2 * d1);
+        T.push({type:"Phân số",title:"Cộng Khác Mẫu",dialogue:`Tính và ghi tử số của kết quả (chưa rút gọn): ${n1}/${d1} + ${n2}/${d2} = ?/${lcd}`,correct:String(nSum),explanation:`Quy đồng mẫu số chung là ${lcd}. Tử số: ${n1}×${d2} + ${n2}×${d1} = ${nSum}`,visual:"🍕"});
+        
+        const whole = randInt(1, 5);
+        const num = randInt(1, 3);
+        const den = randInt(4, 7);
+        T.push({type:"Hỗn số",title:"Chuyển đổi",dialogue:`Đổi hỗn số ${whole} và ${num}/${den} ra phân số (Ví dụ gõ: 13/4)`,correct:`${whole*den+num}/${den}`,explanation:`Tử số = phần nguyên × mẫu + tử = ${whole}×${den}+${num} = ${whole*den+num}. Mẫu giữ nguyên.`,visual:"🍕"});
     }
     if (category === "geometry_flat" || category === "all") {
-        const b = randInt(5, 20), h = randInt(4, 15);
-        const areaTri = (b * h) / 2;
-        if (Number.isInteger(areaTri)) T.push({type:"Hình tam giác",title:"Diện Tích",dialogue:`Tam giác đáy ${b}cm, cao ${h}cm. Diện tích = ______ cm²`,correct:String(areaTri),explanation:`(${b} × ${h}) ÷ 2 = ${areaTri} cm²`,visual:"🔺"});
+        const a = randInt(10, 30);
+        const b = randInt(5, a-1);
+        const h = randInt(5, 20);
+        const areaTrap = ((a + b) * h) / 2;
+        if (Number.isInteger(areaTrap)) {
+             T.push({type:"Hình thang",title:"Diện Tích",dialogue:`Một mảnh đất hình thang có đáy lớn ${a}m, đáy bé ${b}m, chiều cao ${h}m. Diện tích là ______ m²`,correct:String(areaTrap),explanation:`Diện tích = (đáy lớn + đáy bé) × chiều cao ÷ 2 = (${a} + ${b}) × ${h} ÷ 2 = ${areaTrap} m²`,visual:"📐"});
+        }
+
+        const r = pick([1, 2, 3, 4, 5, 10]);
+        const areaCircle = round(r * r * 3.14, 2);
+        T.push({type:"Hình tròn",title:"Diện Tích",dialogue:`Tính diện tích hình tròn bán kính r = ${r}cm (Lấy số pi = 3.14). Đáp số: ______ cm²`,correct:String(areaCircle),explanation:`Diện tích = r × r × 3.14 = ${r} × ${r} × 3.14 = ${areaCircle} cm²`,visual:"⭕"});
     }
     if (category === "units" || category === "all") {
-        const m = randInt(2, 15);
-        T.push({type:"Đổi Đơn Vị",title:"Độ Dài",dialogue:`${m} m = ______ cm`,correct:String(m*100),explanation:`1m = 100cm. Vậy ${m}m = ${m*100}cm`,visual:"📏"});
-        const m2 = randInt(3, 20);
-        T.push({type:"Đổi Đơn Vị",title:"Diện Tích",dialogue:`${m2} m² = ______ dm²`,correct:String(m2*100),explanation:`1m² = 100dm². Vậy ${m2}m² = ${m2*100}dm²`,visual:"🟩"});
+        const m = randInt(2, 9);
+        const cm = randInt(1, 99);
+        T.push({type:"Đổi Đơn Vị",title:"Độ Dài Hỗn Hợp",dialogue:`Đổi ${m}m ${cm}cm = ______ cm`,correct:String(m*100 + cm),explanation:`1m = 100cm. ${m}m ${cm}cm = ${m*100} + ${cm} = ${m*100 + cm}cm`,visual:"📏"});
+        
+        const kg = randInt(1, 9);
+        const g = randInt(10, 990);
+        T.push({type:"Đổi Đơn Vị",title:"Khối Lượng",dialogue:`Đổi ${kg}kg ${g}g = ______ kg (Viết dạng số thập phân)`,correct:String(kg + g/1000),explanation:`1kg = 1000g. ${g}g = ${g/1000}kg. Tổng: ${kg + g/1000}kg`,visual:"⚖️"});
+
+        const m2 = randInt(1, 15);
+        const dm2 = randInt(5, 99);
+        T.push({type:"Đổi Đơn Vị",title:"Diện Tích",dialogue:`Đổi ${m2}m² ${dm2}dm² = ______ dm²`,correct:String(m2*100 + dm2),explanation:`1m² = 100dm². Vậy ${m2}m² = ${m2*100}dm². Tổng = ${m2*100 + dm2}dm²`,visual:"🟩"});
     }
+
+    if (category === "motion" || category === "all") {
+        const v = randInt(30, 60); // km/h
+        const t = pick([2, 3, 4, 1.5, 2.5]); // hours
+        const s = v * t;
+        T.push({type:"Chuyển động",title:"Quãng đường",dialogue:`Ô tô đi với vận tốc ${v} km/h trong ${t} giờ. Quãng đường đi được là ______ km`,correct:String(s),explanation:`Quãng đường = Vận tốc × Thời gian = ${v} × ${t} = ${s} km`,visual:"🚗"});
+        
+        const s2 = pick([120, 150, 200, 240]);
+        const v2 = pick([40, 50, 60]);
+        const t2 = round(s2 / v2, 2);
+        if (Number.isInteger(s2/v2) || (s2*10/v2)%5===0) {
+            T.push({type:"Chuyển động",title:"Thời gian",dialogue:`Xe máy đi quãng đường ${s2} km với vận tốc ${v2} km/h. Thời gian đi là ______ giờ`,correct:String(t2),explanation:`Thời gian = Quãng đường ÷ Vận tốc = ${s2} ÷ ${v2} = ${t2} giờ`,visual:"🏍️"});
+        }
+    }
+
+    if (category === "percentage" || category === "all") {
+        const total = pick([100, 200, 500, 1000]);
+        const pct = pick([10, 15, 20, 25, 50]);
+        const val = (total * pct) / 100;
+        T.push({type:"Tỉ số phần trăm",title:"Tính phần trăm",dialogue:`Tìm ${pct}% của ${total} kg. Đáp án là ______ kg`,correct:String(val),explanation:`${pct}% của ${total} = ${total} × ${pct} ÷ 100 = ${val}`,visual:"📊"});
+        
+        const price = pick([100000, 200000, 500000]);
+        const discount = pick([10, 20, 50]);
+        const finalPrice = price - (price * discount) / 100;
+        T.push({type:"Tỉ số phần trăm",title:"Giảm giá",dialogue:`Một món đồ chơi giá ${price} đồng, được giảm giá ${discount}%. Số tiền phải trả là ______ đồng`,correct:String(finalPrice),explanation:`Số tiền được giảm: ${price} × ${discount} ÷ 100 = ${price*discount/100}. Số tiền phải trả: ${price} - ${price*discount/100} = ${finalPrice}`,visual:"🏷️"});
+    }
+
+    if (category === "word_problems" || category === "all") {
+        const sum = pick([100, 150, 200, 250, 400]);
+        const diff = pick([20, 30, 40, 50, 100]);
+        if (sum > diff) {
+            const big = (sum + diff) / 2;
+            const small = (sum - diff) / 2;
+            T.push({
+                type:"Tổng - Hiệu", title:"Bài toán 2 đáp số", 
+                dialogue:`Trường tổ chức trồng cây. Lớp 5A và 5B trồng được tổng cộng ${sum} cây. Lớp 5A trồng nhiều hơn lớp 5B ${diff} cây. Hỏi mỗi lớp trồng được bao nhiêu cây?`,
+                options: [`5A: ${big} cây, 5B: ${small} cây`, `5A: ${small} cây, 5B: ${big} cây`, `5A: ${big+10} cây, 5B: ${small-10} cây`, `5A: ${sum} cây, 5B: ${diff} cây`],
+                correct:`5A: ${big} cây, 5B: ${small} cây`, 
+                explanation:`Số cây 5A (số lớn) = (Tổng + Hiệu) ÷ 2 = (${sum} + ${diff}) ÷ 2 = ${big}. Số cây 5B = ${sum} - ${big} = ${small}.`, 
+                visual:"🌳"
+            });
+        }
+        
+        const small2 = pick([10, 12, 15, 20]);
+        const ratio = pick([3, 4, 5]);
+        const big2 = small2 * ratio;
+        const diff2 = big2 - small2;
+        T.push({
+            type:"Hiệu - Tỉ", title:"Tính Tuổi", 
+            dialogue:`Hiện nay mẹ hơn con ${diff2} tuổi. Biết rằng tuổi mẹ gấp ${ratio} lần tuổi con. Hỏi hiện nay mẹ và con bao nhiêu tuổi?`,
+            options: [`Mẹ: ${big2} tuổi, Con: ${small2} tuổi`, `Mẹ: ${big2-2} tuổi, Con: ${small2+2} tuổi`, `Mẹ: ${big2+5} tuổi, Con: ${small2+5} tuổi`, `Mẹ: ${diff2} tuổi, Con: ${ratio} tuổi`],
+            correct:`Mẹ: ${big2} tuổi, Con: ${small2} tuổi`, 
+            explanation:`Hiệu số phần bằng nhau là ${ratio} - 1 = ${ratio-1} (phần). Tuổi con = ${diff2} ÷ ${ratio-1} = ${small2} tuổi. Tuổi mẹ = ${small2} × ${ratio} = ${big2} tuổi.`, 
+            visual:"👩‍👧"
+        });
+    }
+    
     if(T.length === 0) T.push({type:"Đại số",title:"Phép tính",dialogue:"1 + 1 = ?",correct:"2",explanation:"Cơ bản",visual:"🔢"});
     return {...pick(T), emoji: "🔢", subject: "math"};
 }
@@ -122,10 +211,34 @@ function generateTheory(subj) {
     return {...q, emoji: emojis[subj], subject: subj};
 }
 
-// ======================== APP STATE ========================
+// ======================== APP STATE & FIREBASE ========================
 const TARGET_BADGES = 50;
 const POINTS_PER_CORRECT = 10;
 const CORRECT_PER_BADGE = 20;
+
+// ⚠️ ĐÃ ĐIỀN MÃ FIREBASE THẬT ⚠️
+const firebaseConfig = {
+    apiKey: "AIzaSyAzuZWkSLCo8hTZrNfqhlDohGL07LQww0A",
+    authDomain: "chuongtrinhlop5keeko.firebaseapp.com",
+    projectId: "chuongtrinhlop5keeko",
+    storageBucket: "chuongtrinhlop5keeko.firebasestorage.app",
+    messagingSenderId: "295095284196",
+    appId: "1:295095284196:web:1d247f15a235f3cef5d7f1",
+    measurementId: "G-CPR5E5ZEL9"
+};
+
+let auth = null;
+let db = null;
+// Nếu chưa có mã, hệ thống tự động chạy chế độ Offline LocalStorage
+const isFirebaseReady = firebaseConfig.apiKey !== "DÁN_API_KEY_CỦA_BẠN_VÀO_ĐÂY";
+if (isFirebaseReady) {
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+}
+
+let currentUser = null;
+let userProgress = {}; // Chứa toàn bộ điểm của tài khoản hiện tại
 
 let currentSubject = null; 
 let currentMathCategory = "all";
@@ -134,18 +247,40 @@ let hintLevel = 0;
 let isSubmitted = false;
 let currentMCQButtons = [];
 
-function loadProgress(subj){
-  try{ const d=JSON.parse(localStorage.getItem("conan_"+subj)); return d||{points:0,correctCount:0}; }catch(e){return{points:0,correctCount:0};}
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
 }
+
+// Lấy điểm: Ưu tiên lấy từ biến userProgress (đã được tải từ mây về)
+function loadProgress(subj){
+  const key = "conan_" + subj + "_" + getTodayStr();
+  return userProgress[key] || {points:0, correctCount:0};
+}
+
+// Lưu điểm: Lưu vào biến cục bộ, sau đó đồng bộ lên Cloud và LocalStorage dự phòng
 function saveProgress(subj,data){
-  try{localStorage.setItem("conan_"+subj,JSON.stringify(data));}catch(e){}
+  const key = "conan_" + subj + "_" + getTodayStr();
+  userProgress[key] = data;
+  
+  // Lưu dự phòng cục bộ
+  try{localStorage.setItem(key,JSON.stringify(data));}catch(e){}
+  
+  // Lưu lên Đám mây
+  if (isFirebaseReady && currentUser) {
+      db.collection("users").doc(currentUser.uid).set({
+          [key]: data
+      }, {merge: true}).catch(err => console.log("Lỗi lưu mây:", err));
+  }
 }
 function getProgress(subj){return loadProgress(subj);}
 
 // ======================== DOM ========================
 const $=id=>document.getElementById(id);
 
+const authScreen=$('authScreen'), authForm=$('authForm'), authEmail=$('authEmail'), authPassword=$('authPassword'), authError=$('authError'), userProfileBadge=$('userProfileBadge');
 const welcomeScreen=$('welcomeScreen'), subjectScreen=$('subjectScreen'), mathCategoryScreen=$('mathCategoryScreen'), exerciseScreen=$('exerciseScreen'), rewardScreen=$('rewardScreen');
+
 const pointsDisplay=$('pointsDisplay'), badgesDisplay=$('badgesDisplay'), rankDisplay=$('rankDisplay'), progressBar=$('progressBar'), progressPercent=$('progressPercent');
 const exVisual=$('exVisual'), exVisualEmoji=$('exVisualEmoji'), exAvatar=$('exAvatar'), caseType=$('caseType'), caseTitle=$('caseTitle'), caseDialogue=$('caseDialogue'), speechBtn=$('speechBtn');
 const hanziBox=$('hanziBox'), hanziChar=$('hanziChar'), hanziPinyin=$('hanziPinyin');
@@ -155,8 +290,62 @@ const feedbackBox=$('feedbackBox'), feedbackText=$('feedbackText'), explanationB
 
 // ======================== NAVIGATION ========================
 function showScreen(screen){
-  [welcomeScreen,subjectScreen,mathCategoryScreen,exerciseScreen,rewardScreen].forEach(s=>s&&s.classList.add('hidden'));
+  [authScreen,welcomeScreen,subjectScreen,mathCategoryScreen,exerciseScreen,rewardScreen].forEach(s=>s&&s.classList.add('hidden'));
   if(screen) screen.classList.remove('hidden');
+}
+
+// ======================== AUTHENTICATION (FIREBASE) ========================
+if (isFirebaseReady) {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUser = user;
+            userProfileBadge.textContent = "Thám tử: " + user.email.split('@')[0];
+            // Tải dữ liệu từ mây về
+            db.collection("users").doc(user.uid).get().then(doc => {
+                if(doc.exists) userProgress = doc.data();
+                showScreen(welcomeScreen);
+            }).catch(e => showScreen(welcomeScreen));
+        } else {
+            currentUser = null;
+            userProgress = {};
+            showScreen(authScreen);
+        }
+    });
+
+    authForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const email = authEmail.value;
+        const pass = authPassword.value;
+        authError.classList.add('hidden');
+        
+        // Thử đăng nhập, nếu thất bại do chưa có tài khoản thì tạo mới
+        auth.signInWithEmailAndPassword(email, pass)
+            .catch(error => {
+                if (error.code === 'auth/user-not-found') {
+                    // Đăng ký mới
+                    auth.createUserWithEmailAndPassword(email, pass)
+                        .catch(err => { authError.textContent = "Lỗi tạo tài khoản: " + err.message; authError.classList.remove('hidden'); });
+                } else {
+                    authError.textContent = "Sai mật khẩu hoặc lỗi: " + error.message; authError.classList.remove('hidden');
+                }
+            });
+    });
+} else {
+    // Chạy Offline Mode nếu chưa có mã Firebase
+    showScreen(authScreen);
+    authForm.addEventListener('submit', e => {
+        e.preventDefault();
+        currentUser = { uid: "offline_user", email: authEmail.value };
+        userProfileBadge.textContent = "Thám tử: " + authEmail.value.split('@')[0];
+        
+        // Nạp data từ localStorage cục bộ
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith("conan_")) {
+                try { userProgress[key] = JSON.parse(localStorage.getItem(key)); } catch(e){}
+            }
+        });
+        showScreen(welcomeScreen);
+    });
 }
 
 function updateSubjectProgress(){
