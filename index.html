@@ -7,13 +7,43 @@
     <meta name="description" content="Ứng dụng học 10 môn cho trẻ em">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
+
+    <!-- Firebase v8 Compat -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
 
+    <!-- ========== 0. AUTH SCREEN (FIREBASE) ========== -->
+    <div id="authScreen" class="screen auth-screen">
+        <div class="auth-card">
+            <div class="auth-header">
+                <span style="font-size:3rem;">🔒</span>
+                <h2>Đăng Nhập Trại Huấn Luyện</h2>
+                <p>Mỗi thám tử có một hồ sơ riêng biệt</p>
+            </div>
+            <form id="authForm" class="auth-body">
+                <div class="auth-input-group">
+                    <label>Email của bé (Hoặc email ảo vd: bo@thamtu.com)</label>
+                    <input type="email" id="authEmail" required placeholder="nhap_email@...">
+                </div>
+                <div class="auth-input-group">
+                    <label>Mật khẩu (Ghi nhớ để lần sau vào lại)</label>
+                    <input type="password" id="authPassword" required minlength="6" placeholder="******">
+                </div>
+                <div id="authError" class="auth-error hidden"></div>
+                <button type="submit" id="loginBtn" class="btn btn-navy btn-full" style="margin-top:12px;">🚀 Bắt Đầu / Đăng Ký</button>
+                <p style="font-size:0.8rem; color:var(--text-light); margin-top:16px;">*Nếu chưa có tài khoản, hệ thống sẽ tự động tạo mới với Email và Mật khẩu bạn vừa nhập.</p>
+            </form>
+        </div>
+    </div>
+
     <!-- ========== 1. WELCOME SCREEN ========== -->
-    <div id="welcomeScreen" class="screen welcome-screen">
+    <div id="welcomeScreen" class="screen welcome-screen hidden">
         <div class="welcome-inner">
+            <div class="user-profile-badge" id="userProfileBadge">Bé: ...</div>
             <div class="welcome-badge">🕵️‍♂️</div>
             <h1 class="welcome-title">TRẠI HUẤN LUYỆN<br>THÁM TỬ</h1>
             <p class="welcome-sub">Học vui - Chơi giỏi - Phá án tài!</p>
@@ -95,6 +125,16 @@
                     <span class="sc-name">Số Thập Phân</span>
                     <span class="sc-desc">Cộng/Trừ/Nhân/Chia</span>
                 </button>
+                <button class="subject-card card-math" data-math-cat="percentage">
+                    <span class="sc-emoji">📊</span>
+                    <span class="sc-name">Tỉ Số Phần Trăm</span>
+                    <span class="sc-desc">Tính %, giảm giá...</span>
+                </button>
+                <button class="subject-card card-math" data-math-cat="motion">
+                    <span class="sc-emoji">🚗</span>
+                    <span class="sc-name">Chuyển Động</span>
+                    <span class="sc-desc">Vận tốc, quãng đường</span>
+                </button>
                 <button class="subject-card card-math" data-math-cat="geometry_flat">
                     <span class="sc-emoji">📐</span>
                     <span class="sc-name">Hình Học Phẳng</span>
@@ -104,6 +144,11 @@
                     <span class="sc-emoji">⚖️</span>
                     <span class="sc-name">Đổi Đơn Vị</span>
                     <span class="sc-desc">m², ha, tấn, tạ, kg...</span>
+                </button>
+                <button class="subject-card card-math" data-math-cat="word_problems">
+                    <span class="sc-emoji">📚</span>
+                    <span class="sc-name">Toán Lời Văn</span>
+                    <span class="sc-desc">Tổng-Hiệu, Hiệu-Tỉ</span>
                 </button>
                 <button class="subject-card card-math" data-math-cat="all">
                     <span class="sc-emoji">🎲</span>
