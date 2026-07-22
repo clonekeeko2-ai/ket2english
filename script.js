@@ -545,20 +545,24 @@ answerForm.addEventListener('submit',e=>{
 
   // Update progress
   const prog=getProgress(currentSubject);
-  if(isCorrect){
-    prog.points+=POINTS_PER_CORRECT;
-    prog.correctCount+=1;
-  }
-  saveProgress(currentSubject,prog);
-
+  
   feedbackBox.classList.remove('hidden','correct','incorrect');
   if(isCorrect){
-    feedbackBox.classList.add('correct');
-    feedbackText.textContent='✅ Chính xác! Giỏi lắm thám tử!';
+    if(hintLevel >= 3) {
+      feedbackBox.classList.add('correct');
+      feedbackText.textContent='✅ Chính xác! Nhưng vì xem đáp án nên không được cộng điểm nhé.';
+    } else {
+      prog.points+=POINTS_PER_CORRECT;
+      prog.correctCount+=1;
+      feedbackBox.classList.add('correct');
+      feedbackText.textContent='✅ Chính xác! Giỏi lắm thám tử!';
+    }
   }else{
     feedbackBox.classList.add('incorrect');
     feedbackText.textContent='❌ Sai rồi! Đáp án: '+currentCase.correct;
   }
+  
+  saveProgress(currentSubject,prog);
 
   // Show hanzi for Chinese
   if(currentSubject==="chinese"&&currentCase.hanzi){

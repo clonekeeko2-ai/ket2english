@@ -12,7 +12,7 @@
   --shadow:0 4px 14px rgba(10,31,68,.12);
 }
 html{font-size:16px;-webkit-text-size-adjust:100%}
-body{font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100dvh;overflow-x:hidden}
+body{font-family:'Be Vietnam Pro',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100dvh;overflow-x:hidden}
 .hidden{display:none!important}
 .screen{width:100%;min-height:100dvh}
 
