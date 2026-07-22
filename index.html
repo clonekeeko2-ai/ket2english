@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detective Conan English Camp</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Utility classes for hiding/showing screens */
+        .hidden { display: none !important; }
+        .hint-text { letter-spacing: 2px; font-weight: bold; color: var(--color-primary); font-family: monospace; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen animate-fade-in">
+        <div class="welcome-card glass-panel">
+            <h1 style="color: var(--color-primary); margin-bottom: 20px;">
+                TRẠI HUẤN LUYỆN THÁM TỬ
+            </h1>
+            
+            <div class="image-container" id="startBtn" style="cursor: pointer;">
+                <img src="images/child.jpg" alt="My Detective" class="child-hero-image" onerror="this.src='https://upload.wikimedia.org/wikipedia/vi/a/aa/Conan_Edogawa.jpg'" />
+                <div class="play-overlay">
+                    <i data-lucide="play" style="color: white; width: 64px; height: 64px;"></i>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 20px; color: var(--color-secondary);">
+                Nhấn vào ảnh để bắt đầu phá án!
+            </h2>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="mainApp" class="app-container hidden animate-fade-in">
+        <header class="app-header">
+            <h1>
+                <i data-lucide="search" class="badge-icon" style="width: 36px; height: 36px;"></i> 
+                Detective Conan English
+            </h1>
+            <p style="color: var(--color-text-light); font-weight: 600;">
+                Cùng phá án và học tiếng Anh chuẩn KET (A2)
+            </p>
+        </header>
+
+        <!-- Dashboard -->
+        <div class="dashboard-container">
+            <div class="stat-card glass-panel animate-fade-in">
+                <i data-lucide="shield" style="color: var(--color-primary); width: 32px; height: 32px;"></i>
+                <div class="stat-value" id="pointsDisplay">0</div>
+                <div class="stat-label">Điểm Thám Tử</div>
+            </div>
+            
+            <div class="stat-card glass-panel animate-fade-in" style="animation-delay: 0.1s;">
+                <i data-lucide="medal" style="color: var(--color-accent); width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"></i>
+                <div class="stat-value" id="badgesDisplay">0/50</div>
+                <div class="stat-label" id="rankDisplay">Thám Tử Nhí</div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBar" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Tiến trình</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise Card -->
+        <div class="glass-panel exercise-card animate-fade-in">
+            <div class="exercise-header">
+                <img id="caseImage" src="https://upload.wikimedia.org/wikipedia/vi/a/aa/Conan_Edogawa.jpg" alt="Conan" class="character-avatar" />
+                <div class="exercise-title">
+                    <span class="exercise-type" id="caseType">Ngữ pháp</span>
+                    <h3 id="caseTitle">Vụ Án Bí Ẩn</h3>
+                </div>
+            </div>
+
+            <div class="dialogue-box">
+                <span id="caseDialogue">...</span>
+                <button id="speechBtn" class="speech-btn" title="Nghe">
+                    <i data-lucide="volume-2" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+
+            <form id="answerForm" class="input-form">
+                <p style="margin-bottom: 10px; font-weight: 600; color: var(--color-text);">
+                    Gõ từ điền vào chỗ trống:
+                </p>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input
+                        type="text"
+                        id="answerInput"
+                        placeholder="Nhập câu trả lời bằng tiếng Anh..."
+                        style="flex: 1; padding: 12px 15px; border-radius: var(--radius-md); border: 2px solid #e2e8f0; font-size: 1.1rem; outline: none; font-family: inherit;"
+                        autocomplete="off"
+                    />
+                    <button type="submit" id="submitBtn" class="btn btn-secondary">
+                        Trả lời <i data-lucide="send" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+                
+                <!-- Hint Section -->
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <button type="button" id="hintBtn" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        <i data-lucide="help-circle" style="width: 16px; height: 16px;"></i> Gợi ý
+                    </button>
+                    <span id="hintDisplay" class="hint-text"></span>
+                </div>
+            </form>
+
+            <div id="feedbackBox" class="answer-feedback animate-fade-in hidden" style="margin-top: 15px; padding: 10px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px; font-weight: bold;">
+                <i id="feedbackIcon" data-lucide="check-circle-2" style="width: 24px; height: 24px;"></i>
+                <span id="feedbackText"></span>
+            </div>
+
+            <div id="explanationBox" class="explanation-box animate-fade-in hidden">
+                <i data-lucide="info" class="explanation-icon" style="width: 24px; height: 24px;"></i>
+                <div class="explanation-content">
+                    <h4>Giải thích</h4>
+                    <p id="caseExplanation">...</p>
+                </div>
+            </div>
+
+            <div id="nextActionBox" class="action-area animate-fade-in hidden">
+                <button id="nextCaseBtn" class="btn btn-primary">
+                    Tiếp Tục Điều Tra <i data-lucide="search" style="width: 18px; height: 18px; margin-left: 5px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reward Screen -->
+    <div id="rewardScreen" class="reward-screen hidden">
+        <div class="ticket-card animate-shake">
+            <div class="ticket-header">
+                <h2>CHÚC MỪNG THÁM TỬ XUẤT SẮC!</h2>
+            </div>
+            <div class="ticket-body">
+                <i data-lucide="star" style="color: #fcd34d; width: 64px; height: 64px; margin-bottom: 20px;"></i>
+                <p>Bé đã hoàn thành xuất sắc khóa huấn luyện KET (A2) với điểm tuyệt đối!</p>
+                <p style="font-weight: bold; color: var(--color-secondary); font-size: 1.5rem;">
+                    Tặng 1 vé đi ăn Buffet!
+                </p>
+                <p style="font-size: 1rem; color: var(--color-text-light);">
+                    (Bố mẹ hãy chụp màn hình này để đổi thưởng nhé)
+                </p>
+            </div>
+            <div class="ticket-footer">
+                <button id="resetAppBtn" class="btn btn-primary">Chơi Lại Từ Đầu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
