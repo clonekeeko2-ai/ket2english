@@ -4,281 +4,178 @@
 //  Progress saved in localStorage
 // ============================================================
 
+// ======================== HELPER FUNCTIONS ========================
+function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function round(num, decimals) { return Number(Math.round(num + 'e' + decimals) + 'e-' + decimals); }
+// Remove punctuation and extra spaces for English comparison
+function normalizeAnswer(str) {
+    return str.toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' ').trim();
+}
+
 // ======================== ENGLISH KET GENERATOR ========================
 const EN_CHARS = ["Conan","Ran","Kogoro","Haibara","Heiji","Sonoko","Agasa","Megure"];
-const EN_PLACES = ["library","school","park","museum","hospital","station","restaurant","supermarket","airport","cinema","hotel","zoo","garden","office"];
-const EN_OBJECTS = ["book","watch","glasses","bag","phone","key","letter","map","camera","wallet","notebook","umbrella","ticket","pen"];
-function pick(a){return a[Math.floor(Math.random()*a.length)]}
+const EN_PLACES = ["library","school","park","museum","hospital","station","restaurant","supermarket","airport","cinema"];
+const EN_OBJECTS = ["book","watch","glasses","bag","phone","key","letter","map","camera","wallet"];
 
-function generateEnglish(){
-  const c=pick(EN_CHARS), p=pick(EN_PLACES), o=pick(EN_OBJECTS);
-  const T=[
-    {type:"Quá khứ đơn",title:"Vụ Án Hôm Qua",dialogue:`Yesterday, ${c} ______ to the ${p}.`,correct:"went",explanation:`"Yesterday" → quá khứ. "go" → "went".`},
-    {type:"Quá khứ đơn",title:"Manh Mối",dialogue:`I ______ a strange ${o} in the ${p} last night.`,correct:"found",explanation:`"last night" → quá khứ. "find" → "found".`},
-    {type:"Quá khứ đơn",title:"Bữa Trưa",dialogue:`${c} ______ lunch at the ${p} yesterday.`,correct:"ate",explanation:`"yesterday" → "eat" → "ate".`},
-    {type:"Quá khứ đơn",title:"Chụp Ảnh",dialogue:`The detective ______ a photo of the suspect.`,correct:"took",explanation:`"take" → quá khứ "took".`},
-    {type:"Quá khứ đơn",title:"Truy Đuổi",dialogue:`The police ______ after the thief.`,correct:"ran",explanation:`"run" → quá khứ "ran".`},
-    {type:"Quá khứ đơn",title:"Viết Thư",dialogue:`${c} ______ the answer in a ${o}.`,correct:"wrote",explanation:`"write" → quá khứ "wrote".`},
-    {type:"Quá khứ đơn",title:"Bắt Giữ",dialogue:`The police ______ the thief near the ${p}.`,correct:"caught",explanation:`"catch" → quá khứ "caught".`},
-    {type:"Giới từ",title:"Trên Bàn",dialogue:`The ${o} is ______ the table.`,correct:"on",explanation:`"on the table" = trên mặt bàn.`},
-    {type:"Giới từ",title:"Cuộc Hẹn",dialogue:`${c} will meet us ______ 3 o'clock.`,correct:"at",explanation:`Trước giờ cụ thể dùng "at".`},
-    {type:"Giới từ",title:"Ngày",dialogue:`The crime happened ______ Monday.`,correct:"on",explanation:`Trước ngày trong tuần dùng "on".`},
-    {type:"Giới từ",title:"Tháng",dialogue:`It happened ______ January.`,correct:"in",explanation:`Trước tháng dùng "in".`},
-    {type:"Giới từ",title:"Trong Phòng",dialogue:`The suspect is hiding ______ the room.`,correct:"in",explanation:`"in the room" = trong phòng.`},
-    {type:"Động từ khuyết thiếu",title:"Khả Năng",dialogue:`${c} ______ solve this case!`,correct:"can",explanation:`"can" = có thể.`},
-    {type:"Động từ khuyết thiếu",title:"Cấm",dialogue:`You ______ not touch the evidence!`,correct:"must",explanation:`"must not" = không được phép.`},
-    {type:"Động từ khuyết thiếu",title:"Nên",dialogue:`You ______ study harder.`,correct:"should",explanation:`"should" = nên.`},
-    {type:"Hiện tại tiếp diễn",title:"Theo Dõi",dialogue:`Look! The suspect ______ running!`,correct:"is",explanation:`"The suspect" (số ít) + "is" + V-ing.`},
-    {type:"Hiện tại tiếp diễn",title:"Chúng Ta",dialogue:`They ______ playing in the ${p}.`,correct:"are",explanation:`"They" + "are" + V-ing.`},
-    {type:"Hiện tại tiếp diễn",title:"Ngay Lúc Này",dialogue:`I ______ reading a ${o} right now.`,correct:"am",explanation:`"I" + "am" + V-ing.`},
-    {type:"Mạo từ",title:"Phát Hiện",dialogue:`${c} found ______ old ${o}.`,correct:"an",explanation:`"old" bắt đầu bằng nguyên âm → "an".`},
-    {type:"So sánh",title:"Thông Minh",dialogue:`${c} is ______ than the criminal.`,correct:"smarter",explanation:`"smart" + "-er" → "smarter".`},
-    {type:"So sánh",title:"Giỏi Nhất",dialogue:`Conan is the ______ detective.`,correct:"best",explanation:`"good" → "the best" (bất quy tắc).`},
-    {type:"Câu hỏi",title:"Ở Đâu",dialogue:`______ do you live?`,correct:"Where",explanation:`"Where" = Ở đâu?`},
-    {type:"Câu hỏi",title:"Khi Nào",dialogue:`______ did it happen?`,correct:"When",explanation:`"When" = Khi nào?`},
-    {type:"Câu hỏi",title:"Tại Sao",dialogue:`______ are you late?`,correct:"Why",explanation:`"Why" = Tại sao?`},
-    {type:"Từ vựng",title:"Thư Viện",dialogue:`Students read books at the ______.`,correct:"library",explanation:`"library" = thư viện.`,visual:"📚"},
-    {type:"Từ vựng",title:"Rạp Phim",dialogue:`Let's watch a movie at the ______.`,correct:"cinema",explanation:`"cinema" = rạp chiếu phim.`,visual:"🎬"},
-    {type:"Từ vựng",title:"Siêu Thị",dialogue:`We buy food at the ______.`,correct:"supermarket",explanation:`"supermarket" = siêu thị.`,visual:"🛒"},
-    {type:"Từ vựng",title:"Bệnh Viện",dialogue:`Sick people go to the ______.`,correct:"hospital",explanation:`"hospital" = bệnh viện.`,visual:"🏥"},
-    {type:"Từ vựng",title:"Giáo Viên",dialogue:`A ______ teaches students.`,correct:"teacher",explanation:`"teacher" = giáo viên.`,visual:"👩‍🏫"},
-    {type:"Từ vựng",title:"Bác Sĩ",dialogue:`A ______ helps sick people.`,correct:"doctor",explanation:`"doctor" = bác sĩ.`,visual:"👨‍⚕️"},
-    {type:"Từ vựng",title:"Con Mèo",dialogue:`A ______ says "meow".`,correct:"cat",explanation:`"cat" = con mèo.`,visual:"🐱"},
-    {type:"Từ vựng",title:"Con Chó",dialogue:`A ______ is man's best friend.`,correct:"dog",explanation:`"dog" = con chó.`,visual:"🐶"},
-    {type:"Từ vựng",title:"Trời Mưa",dialogue:`Take an umbrella! It is ______.`,correct:"rainy",explanation:`"rainy" = có mưa.`,visual:"🌧️"},
-    {type:"Từ vựng",title:"Trời Nắng",dialogue:`Wear sunscreen! It is ______.`,correct:"sunny",explanation:`"sunny" = nắng.`,visual:"☀️"},
-    {type:"Từ vựng",title:"Bầu Trời",dialogue:`The sky is ______ on a sunny day.`,correct:"blue",explanation:`"blue" = xanh dương.`,visual:"🔵"},
-    {type:"Từ vựng",title:"Cỏ Cây",dialogue:`The grass is ______.`,correct:"green",explanation:`"green" = xanh lá.`,visual:"🟢"},
-    {type:"Từ vựng",title:"Sữa",dialogue:`I drink ______ every morning.`,correct:"milk",explanation:`"milk" = sữa.`,visual:"🥛"},
-    {type:"Hiện tại đơn",title:"Thói Quen",dialogue:`${c} ______ to school every day.`,correct:"goes",explanation:`Ngôi 3 số ít: "go" + "es" → "goes".`},
-    {type:"Hiện tại đơn",title:"Phủ Định",dialogue:`I ______ not understand.`,correct:"do",explanation:`Phủ định ngôi 1: "I do not".`},
-    {type:"Sở hữu",title:"Của Tôi",dialogue:`This is ______ book. (của tôi)`,correct:"my",explanation:`"my" = của tôi.`},
-    {type:"Sở hữu",title:"Của Bạn",dialogue:`Is this ______ pen? (của bạn)`,correct:"your",explanation:`"your" = của bạn.`},
-    {type:"There is/are",title:"Phát Hiện",dialogue:`______ is a ${o} on the floor!`,correct:"There",explanation:`"There is" + danh từ số ít.`},
-    {type:"Liên từ",title:"Bởi Vì",dialogue:`${c} stayed home ______ it was rainy.`,correct:"because",explanation:`"because" = bởi vì.`},
-    {type:"Liên từ",title:"Nhưng",dialogue:`I wanted to go, ______ it was late.`,correct:"but",explanation:`"but" = nhưng.`},
-    {type:"Từ vựng",title:"Đôi Mắt",dialogue:`We use our ______ to see.`,correct:"eyes",explanation:`"eyes" = đôi mắt.`,visual:"👀"},
-    {type:"Từ vựng",title:"Bàn Tay",dialogue:`We write with our ______.`,correct:"hands",explanation:`"hands" = bàn tay.`,visual:"✋"},
-    {type:"Từ vựng",title:"Bà Ngoại",dialogue:`My ______ is my mom's mom.`,correct:"grandmother",explanation:`"grandmother" = bà.`,visual:"👵"},
-    {type:"Từ vựng",title:"Bố",dialogue:`My ______ goes to work every morning.`,correct:"father",explanation:`"father" = bố.`,visual:"👨"},
-  ];
-  const t=pick(T);
-  return {...t,emoji:pick(["🕵️","👩","🧔","👧","👨‍🔬","👮"]),subject:"english"};
+function generateEnglish() {
+    const c = pick(EN_CHARS), p = pick(EN_PLACES), o = pick(EN_OBJECTS);
+    
+    // 1. SCRAMBLED SENTENCES
+    const sentences = [
+        `Yesterday ${c} went to the ${p}`,
+        `${c} found a strange ${o} on the table`,
+        `The suspect is hiding in the ${p}`,
+        `${c} is the best detective in town`,
+        `They are playing soccer in the park`,
+        `I bought a new ${o} yesterday`,
+        `She likes reading books in the library`,
+        `The thief stole my ${o} last night`
+    ];
+    
+    const s = pick(sentences);
+    const words = s.split(' ');
+    // Scramble the words
+    let scrambled = [...words];
+    for (let i = scrambled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [scrambled[i], scrambled[j]] = [scrambled[j], scrambled[i]];
+    }
+
+    const T = [
+        // Grammar Fill-in-the-blank
+        {type:"Quá khứ đơn",title:"Vụ Án Hôm Qua",dialogue:`Yesterday, ${c} ______ to the ${p}.`,correct:"went",explanation:`"Yesterday" → quá khứ. "go" → "went".`,visual:"🕵️"},
+        {type:"Quá khứ đơn",title:"Manh Mối",dialogue:`I ______ a strange ${o} last night.`,correct:"found",explanation:`"last night" → quá khứ. "find" → "found".`,visual:"🔎"},
+        {type:"Hiện tại tiếp diễn",title:"Theo Dõi",dialogue:`Look! The suspect ______ running!`,correct:"is",explanation:`"The suspect" (số ít) + "is" + V-ing.`,visual:"🏃"},
+        {type:"Mạo từ",title:"Phát Hiện",dialogue:`${c} found ______ old ${o}.`,correct:"an",explanation:`"old" bắt đầu bằng nguyên âm → "an".`,visual:"📦"},
+        {type:"So sánh",title:"Thông Minh",dialogue:`${c} is ______ than the criminal.`,correct:"smarter",explanation:`"smart" + "-er" → "smarter".`,visual:"🧠"},
+        {type:"Từ vựng",title:"Thư Viện",dialogue:`Students read books at the ______.`,correct:"library",explanation:`"library" = thư viện.`,visual:"📚"},
+        
+        // Scrambled Sentence format
+        {
+            type: "Sắp xếp câu",
+            title: "Giải Mã Thông Điệp",
+            dialogue: `Sắp xếp các từ sau thành câu hoàn chỉnh:\n[ ${scrambled.join(' / ')} ]`,
+            correct: s,
+            explanation: `Thứ tự đúng: ${s}`,
+            visual: "🧩"
+        }
+    ];
+    
+    // Weight towards scrambled sentences slightly
+    const t = Math.random() > 0.5 ? T[T.length - 1] : pick(T.slice(0, T.length - 1));
+    return {...t, emoji: pick(["🕵️","👩","🧔","👧","👨‍🔬","👮"]), subject: "english"};
 }
 
 // ======================== MATH GRADE 5 GENERATOR ========================
-function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function generateMath(category) {
+    let T = [];
 
-function generateMath(){
-  const T=[];
-
-  // --- Arithmetic ---
-  for(let i=0;i<5;i++){
-    const a=randInt(100,999),b=randInt(100,999);
-    T.push({type:"Phép cộng",title:"Tính Nhanh",dialogue:`${a} + ${b} = ______`,correct:String(a+b),explanation:`${a} + ${b} = ${a+b}`,visual:"➕"});
-  }
-  for(let i=0;i<5;i++){
-    const a=randInt(500,999),b=randInt(100,a);
-    T.push({type:"Phép trừ",title:"Tính Nhanh",dialogue:`${a} - ${b} = ______`,correct:String(a-b),explanation:`${a} - ${b} = ${a-b}`,visual:"➖"});
-  }
-  for(let i=0;i<5;i++){
-    const a=randInt(10,99),b=randInt(2,9);
-    T.push({type:"Phép nhân",title:"Tính Nhanh",dialogue:`${a} × ${b} = ______`,correct:String(a*b),explanation:`${a} × ${b} = ${a*b}`,visual:"✖️"});
-  }
-  for(let i=0;i<5;i++){
-    const b=randInt(2,12),r=randInt(10,99),a=b*r;
-    T.push({type:"Phép chia",title:"Chia Hết",dialogue:`${a} ÷ ${b} = ______`,correct:String(r),explanation:`${a} ÷ ${b} = ${r}`,visual:"➗"});
-  }
-
-  // --- Find X ---
-  for(let i=0;i<5;i++){
-    const x=randInt(5,50),b=randInt(10,100),sum=x+b;
-    T.push({type:"Tìm X",title:"Ẩn Số Bí Mật",dialogue:`X + ${b} = ${sum}. X = ______`,correct:String(x),explanation:`X = ${sum} - ${b} = ${x}`,visual:"❓"});
-  }
-  for(let i=0;i<5;i++){
-    const x=randInt(2,20),b=randInt(2,9),prod=x*b;
-    T.push({type:"Tìm X",title:"Ẩn Số Bí Mật",dialogue:`X × ${b} = ${prod}. X = ______`,correct:String(x),explanation:`X = ${prod} ÷ ${b} = ${x}`,visual:"❓"});
-  }
-
-  // --- Geometry: Rectangle ---
-  for(let i=0;i<3;i++){
-    const w=randInt(3,15),h=randInt(3,15);
-    T.push({type:"Hình chữ nhật",title:"Chu Vi",dialogue:`Hình chữ nhật có chiều dài ${w}cm, chiều rộng ${h}cm. Chu vi = ______ cm`,correct:String((w+h)*2),explanation:`Chu vi = (${w} + ${h}) × 2 = ${(w+h)*2} cm`,visual:"▬"});
-    T.push({type:"Hình chữ nhật",title:"Diện Tích",dialogue:`Hình chữ nhật ${w}cm × ${h}cm. Diện tích = ______ cm²`,correct:String(w*h),explanation:`S = ${w} × ${h} = ${w*h} cm²`,visual:"▬"});
-  }
-
-  // --- Geometry: Square ---
-  for(let i=0;i<3;i++){
-    const s=randInt(3,20);
-    T.push({type:"Hình vuông",title:"Chu Vi",dialogue:`Hình vuông cạnh ${s}cm. Chu vi = ______ cm`,correct:String(s*4),explanation:`Chu vi = ${s} × 4 = ${s*4} cm`,visual:"⬜"});
-    T.push({type:"Hình vuông",title:"Diện Tích",dialogue:`Hình vuông cạnh ${s}cm. Diện tích = ______ cm²`,correct:String(s*s),explanation:`S = ${s} × ${s} = ${s*s} cm²`,visual:"⬜"});
-  }
-
-  // --- Geometry: Triangle ---
-  for(let i=0;i<3;i++){
-    const b=randInt(4,20),h=randInt(4,20),area=b*h/2;
-    if(Number.isInteger(area)){
-      T.push({type:"Hình tam giác",title:"Diện Tích",dialogue:`Tam giác đáy ${b}cm, cao ${h}cm. Diện tích = ______ cm²`,correct:String(area),explanation:`S = ${b} × ${h} ÷ 2 = ${area} cm²`,visual:"🔺"});
+    // --- 1. SỐ THẬP PHÂN (Decimals) ---
+    if (category === "decimals" || category === "all") {
+        for(let i=0; i<3; i++) {
+            const a = round(randInt(10, 99) + Math.random(), 1);
+            const b = round(randInt(1, 9) + Math.random(), 1);
+            T.push({type:"Số thập phân",title:"Phép Cộng",dialogue:`${a} + ${b} = ______`,correct:String(round(a+b, 1)),explanation:`Cộng phần nguyên và phần thập phân: ${a} + ${b} = ${round(a+b, 1)}`,visual:"➕"});
+            T.push({type:"Số thập phân",title:"Phép Trừ",dialogue:`${a} - ${b} = ______`,correct:String(round(a-b, 1)),explanation:`Trừ phần nguyên và phần thập phân: ${a} - ${b} = ${round(a-b, 1)}`,visual:"➖"});
+        }
+        for(let i=0; i<2; i++) {
+            const a = round(randInt(2, 10) + (randInt(1,9)/10), 1);
+            const b = randInt(2, 5); // multiply by integer for simplicity
+            T.push({type:"Số thập phân",title:"Phép Nhân",dialogue:`${a} × ${b} = ______`,correct:String(round(a*b, 1)),explanation:`Nhân như số tự nhiên, đặt dấu phẩy: ${a} × ${b} = ${round(a*b, 1)}`,visual:"✖️"});
+        }
     }
-  }
 
-  // --- Geometry: Circle ---
-  for(let i=0;i<2;i++){
-    const r=randInt(2,10);
-    const circumference = Math.round(2*3.14*r*100)/100;
-    T.push({type:"Hình tròn",title:"Chu Vi",dialogue:`Hình tròn bán kính ${r}cm (π ≈ 3.14). Chu vi = ______ cm`,correct:String(circumference),explanation:`C = 2 × 3.14 × ${r} = ${circumference} cm`,visual:"⭕"});
-    const area = Math.round(3.14*r*r*100)/100;
-    T.push({type:"Hình tròn",title:"Diện Tích",dialogue:`Hình tròn bán kính ${r}cm (π ≈ 3.14). Diện tích = ______ cm²`,correct:String(area),explanation:`S = 3.14 × ${r} × ${r} = ${area} cm²`,visual:"⭕"});
-  }
-
-  // --- Fractions ---
-  for(let i=0;i<3;i++){
-    const d=randInt(3,10),n1=randInt(1,d-1),n2=randInt(1,d-1),sum=n1+n2;
-    if(sum<d){
-      T.push({type:"Phân số",title:"Cộng Phân Số",dialogue:`${n1}/${d} + ${n2}/${d} = ______/${d}`,correct:String(sum),explanation:`${n1}/${d} + ${n2}/${d} = ${sum}/${d} (cùng mẫu, cộng tử)`,visual:"🔢"});
+    // --- 2. TỈ SỐ PHẦN TRĂM (Percentage) ---
+    if (category === "percentage" || category === "all") {
+        for(let i=0; i<3; i++) {
+            const total = randInt(2, 10) * 100; // 200, 300, 1000...
+            const percent = randInt(1, 9) * 10; // 10%, 20%...
+            const ans = (total * percent) / 100;
+            T.push({type:"Tỉ số phần trăm",title:"Tính %",dialogue:`Tìm ${percent}% của ${total} = ______`,correct:String(ans),explanation:`Lấy ${total} ÷ 100 × ${percent} = ${ans}`,visual:"📊"});
+            
+            const price = randInt(5, 20) * 10000;
+            const discount = randInt(1, 5) * 10;
+            const finalPrice = price - (price * discount / 100);
+            T.push({type:"Tỉ số phần trăm",title:"Giảm Giá",dialogue:`Quyển sách giá ${price}đ, được giảm giá ${discount}%. Giá sau khi giảm là: ______ đ`,correct:String(finalPrice),explanation:`Số tiền giảm: ${price} × ${discount}% = ${price * discount / 100}đ. Giá sau giảm: ${price} - ${price * discount / 100} = ${finalPrice}đ`,visual:"🏷️"});
+        }
     }
-  }
 
-  // --- Average ---
-  for(let i=0;i<3;i++){
-    const n=randInt(3,5),nums=[];
-    for(let j=0;j<n;j++) nums.push(randInt(5,20));
-    const avg=nums.reduce((a,b)=>a+b,0)/n;
-    if(Number.isInteger(avg)){
-      T.push({type:"Trung bình cộng",title:"Tính TB",dialogue:`Trung bình cộng của ${nums.join(", ")} = ______`,correct:String(avg),explanation:`(${nums.join(" + ")}) ÷ ${n} = ${avg}`,visual:"📊"});
+    // --- 3. TOÁN CHUYỂN ĐỘNG (Motion: s = v*t) ---
+    if (category === "motion" || category === "all") {
+        for(let i=0; i<3; i++) {
+            const v = randInt(30, 60); // km/h
+            const t = randInt(2, 5); // hours
+            const s = v * t;
+            T.push({type:"Chuyển động",title:"Tính Quãng Đường",dialogue:`Ô tô đi với vận tốc ${v} km/h trong ${t} giờ. Quãng đường đi được là ______ km.`,correct:String(s),explanation:`Công thức: s = v × t. Quãng đường = ${v} × ${t} = ${s} km`,visual:"🚗"});
+            T.push({type:"Chuyển động",title:"Tính Vận Tốc",dialogue:`Người đó đi được ${s} km trong ${t} giờ. Vận tốc là ______ km/h.`,correct:String(v),explanation:`Công thức: v = s ÷ t. Vận tốc = ${s} ÷ ${t} = ${v} km/h`,visual:"🏍️"});
+        }
     }
-  }
 
-  const t=pick(T);
-  return {...t,emoji:pick(["📐","📏","🔢","🧮","📊"]),subject:"math"};
+    // --- 4. HÌNH HỌC PHẲNG NÂNG CAO (Flat Geometry) ---
+    if (category === "geometry_flat" || category === "all") {
+        for(let i=0; i<3; i++) {
+            const b = randInt(5, 20); // base
+            const h = randInt(4, 15); // height
+            const a_top = randInt(3, 10); // top base for trapezoid
+            
+            // Triangle
+            const areaTri = (b * h) / 2;
+            if (Number.isInteger(areaTri)) {
+                T.push({type:"Hình tam giác",title:"Diện Tích",dialogue:`Hình tam giác có độ dài đáy ${b}cm, chiều cao ${h}cm. Diện tích = ______ cm²`,correct:String(areaTri),explanation:`Công thức: S = (đáy × cao) ÷ 2 = (${b} × ${h}) ÷ 2 = ${areaTri} cm²`,visual:"🔺"});
+            }
+            
+            // Trapezoid
+            const areaTrap = ((a_top + b) * h) / 2;
+            if (Number.isInteger(areaTrap)) {
+                T.push({type:"Hình thang",title:"Diện Tích",dialogue:`Hình thang có đáy lớn ${b}cm, đáy bé ${a_top}cm, chiều cao ${h}cm. Diện tích = ______ cm²`,correct:String(areaTrap),explanation:`Công thức: S = (đáy lớn + đáy bé) × cao ÷ 2 = (${b} + ${a_top}) × ${h} ÷ 2 = ${areaTrap} cm²`,visual:"📏"});
+            }
+            
+            // Circle
+            const r = randInt(2, 10);
+            const areaCir = round(3.14 * r * r, 2);
+            T.push({type:"Hình tròn",title:"Diện Tích",dialogue:`Hình tròn có bán kính r = ${r}cm. Diện tích = ______ cm² (Lấy π = 3.14)`,correct:String(areaCir),explanation:`Công thức: S = r × r × 3.14 = ${r} × ${r} × 3.14 = ${areaCir} cm²`,visual:"⭕"});
+        }
+    }
+
+    // --- 5. HÌNH HỌC KHÔNG GIAN (Space Geometry) ---
+    if (category === "geometry_space" || category === "all") {
+        for(let i=0; i<3; i++) {
+            const a = randInt(2, 10); // edge for cube
+            T.push({type:"Hình lập phương",title:"Thể Tích",dialogue:`Hình lập phương có cạnh ${a}cm. Thể tích = ______ cm³`,correct:String(a*a*a),explanation:`Công thức: V = cạnh × cạnh × cạnh = ${a} × ${a} × ${a} = ${a*a*a} cm³`,visual:"🧊"});
+            
+            const l = randInt(5, 12); // length
+            const w = randInt(3, 8);  // width
+            const h = randInt(2, 6);  // height
+            T.push({type:"Hình hộp chữ nhật",title:"Thể Tích",dialogue:`Hình hộp chữ nhật có chiều dài ${l}cm, chiều rộng ${w}cm, chiều cao ${h}cm. Thể tích = ______ cm³`,correct:String(l*w*h),explanation:`Công thức: V = dài × rộng × cao = ${l} × ${w} × ${h} = ${l*w*h} cm³`,visual:"📦"});
+        }
+    }
+
+    // Fallback if T is empty (shouldn't happen)
+    if(T.length === 0) {
+        T.push({type:"Đại số",title:"Phép tính",dialogue:"1 + 1 = ?",correct:"2",explanation:"Cơ bản",visual:"🔢"});
+    }
+
+    const t = pick(T);
+    return {...t, emoji: pick(["📏","🔢","🧮","📊","📐"]), subject: "math"};
 }
 
 // ======================== CHINESE GENERATOR ========================
 const ZH_VOCAB = [
-  // Greetings
   {hanzi:"你好",pinyin:"ni hao",meaning:"Xin chào",visual:"👋"},
   {hanzi:"谢谢",pinyin:"xie xie",meaning:"Cảm ơn",visual:"🙏"},
-  {hanzi:"再见",pinyin:"zai jian",meaning:"Tạm biệt",visual:"👋"},
-  {hanzi:"对不起",pinyin:"dui bu qi",meaning:"Xin lỗi",visual:"🙇"},
-  {hanzi:"没关系",pinyin:"mei guan xi",meaning:"Không sao",visual:"😊"},
-  {hanzi:"请",pinyin:"qing",meaning:"Xin mời / Làm ơn",visual:"🤲"},
-  // Numbers
   {hanzi:"一",pinyin:"yi",meaning:"Một (1)",visual:"1️⃣"},
   {hanzi:"二",pinyin:"er",meaning:"Hai (2)",visual:"2️⃣"},
   {hanzi:"三",pinyin:"san",meaning:"Ba (3)",visual:"3️⃣"},
-  {hanzi:"四",pinyin:"si",meaning:"Bốn (4)",visual:"4️⃣"},
-  {hanzi:"五",pinyin:"wu",meaning:"Năm (5)",visual:"5️⃣"},
-  {hanzi:"六",pinyin:"liu",meaning:"Sáu (6)",visual:"6️⃣"},
-  {hanzi:"七",pinyin:"qi",meaning:"Bảy (7)",visual:"7️⃣"},
-  {hanzi:"八",pinyin:"ba",meaning:"Tám (8)",visual:"8️⃣"},
-  {hanzi:"九",pinyin:"jiu",meaning:"Chín (9)",visual:"9️⃣"},
-  {hanzi:"十",pinyin:"shi",meaning:"Mười (10)",visual:"🔟"},
-  {hanzi:"百",pinyin:"bai",meaning:"Trăm (100)",visual:"💯"},
-  // Family
   {hanzi:"妈妈",pinyin:"ma ma",meaning:"Mẹ",visual:"👩"},
   {hanzi:"爸爸",pinyin:"ba ba",meaning:"Bố",visual:"👨"},
-  {hanzi:"哥哥",pinyin:"ge ge",meaning:"Anh trai",visual:"👦"},
-  {hanzi:"姐姐",pinyin:"jie jie",meaning:"Chị gái",visual:"👧"},
-  {hanzi:"弟弟",pinyin:"di di",meaning:"Em trai",visual:"👦"},
-  {hanzi:"妹妹",pinyin:"mei mei",meaning:"Em gái",visual:"👧"},
-  {hanzi:"爷爷",pinyin:"ye ye",meaning:"Ông nội",visual:"👴"},
-  {hanzi:"奶奶",pinyin:"nai nai",meaning:"Bà nội",visual:"👵"},
-  // Animals
   {hanzi:"猫",pinyin:"mao",meaning:"Con mèo",visual:"🐱"},
   {hanzi:"狗",pinyin:"gou",meaning:"Con chó",visual:"🐶"},
-  {hanzi:"鱼",pinyin:"yu",meaning:"Con cá",visual:"🐟"},
-  {hanzi:"鸟",pinyin:"niao",meaning:"Con chim",visual:"🐦"},
-  {hanzi:"马",pinyin:"ma",meaning:"Con ngựa",visual:"🐴"},
-  {hanzi:"牛",pinyin:"niu",meaning:"Con bò",visual:"🐮"},
-  {hanzi:"猪",pinyin:"zhu",meaning:"Con heo",visual:"🐷"},
-  {hanzi:"兔子",pinyin:"tu zi",meaning:"Con thỏ",visual:"🐰"},
-  {hanzi:"老虎",pinyin:"lao hu",meaning:"Con hổ",visual:"🐯"},
-  {hanzi:"大象",pinyin:"da xiang",meaning:"Con voi",visual:"🐘"},
-  {hanzi:"猴子",pinyin:"hou zi",meaning:"Con khỉ",visual:"🐵"},
-  // Colors
   {hanzi:"红色",pinyin:"hong se",meaning:"Màu đỏ",visual:"🔴"},
-  {hanzi:"蓝色",pinyin:"lan se",meaning:"Màu xanh dương",visual:"🔵"},
-  {hanzi:"绿色",pinyin:"lv se",meaning:"Màu xanh lá",visual:"🟢"},
-  {hanzi:"黄色",pinyin:"huang se",meaning:"Màu vàng",visual:"🟡"},
-  {hanzi:"白色",pinyin:"bai se",meaning:"Màu trắng",visual:"⚪"},
-  {hanzi:"黑色",pinyin:"hei se",meaning:"Màu đen",visual:"⚫"},
-  // Food & Drink
   {hanzi:"水",pinyin:"shui",meaning:"Nước",visual:"💧"},
-  {hanzi:"茶",pinyin:"cha",meaning:"Trà",visual:"🍵"},
-  {hanzi:"牛奶",pinyin:"niu nai",meaning:"Sữa bò",visual:"🥛"},
-  {hanzi:"米饭",pinyin:"mi fan",meaning:"Cơm",visual:"🍚"},
-  {hanzi:"面条",pinyin:"mian tiao",meaning:"Mì / Phở",visual:"🍜"},
   {hanzi:"苹果",pinyin:"ping guo",meaning:"Quả táo",visual:"🍎"},
-  {hanzi:"西瓜",pinyin:"xi gua",meaning:"Dưa hấu",visual:"🍉"},
-  {hanzi:"蛋糕",pinyin:"dan gao",meaning:"Bánh kem",visual:"🎂"},
-  {hanzi:"鸡蛋",pinyin:"ji dan",meaning:"Trứng gà",visual:"🥚"},
-  {hanzi:"面包",pinyin:"mian bao",meaning:"Bánh mì",visual:"🍞"},
-  // Objects / Furniture
   {hanzi:"书",pinyin:"shu",meaning:"Sách",visual:"📖"},
-  {hanzi:"笔",pinyin:"bi",meaning:"Bút",visual:"🖊️"},
-  {hanzi:"桌子",pinyin:"zhuo zi",meaning:"Cái bàn",visual:"🪑"},
-  {hanzi:"椅子",pinyin:"yi zi",meaning:"Cái ghế",visual:"💺"},
-  {hanzi:"门",pinyin:"men",meaning:"Cái cửa",visual:"🚪"},
-  {hanzi:"窗户",pinyin:"chuang hu",meaning:"Cửa sổ",visual:"🪟"},
-  {hanzi:"电话",pinyin:"dian hua",meaning:"Điện thoại",visual:"📱"},
-  {hanzi:"电脑",pinyin:"dian nao",meaning:"Máy tính",visual:"💻"},
-  {hanzi:"钟",pinyin:"zhong",meaning:"Đồng hồ",visual:"🕐"},
-  {hanzi:"伞",pinyin:"san",meaning:"Cái ô/dù",visual:"☂️"},
-  // Places
-  {hanzi:"学校",pinyin:"xue xiao",meaning:"Trường học",visual:"🏫"},
-  {hanzi:"医院",pinyin:"yi yuan",meaning:"Bệnh viện",visual:"🏥"},
-  {hanzi:"家",pinyin:"jia",meaning:"Nhà",visual:"🏠"},
-  {hanzi:"商店",pinyin:"shang dian",meaning:"Cửa hàng",visual:"🏪"},
-  {hanzi:"公园",pinyin:"gong yuan",meaning:"Công viên",visual:"🌳"},
-  // Body
-  {hanzi:"手",pinyin:"shou",meaning:"Bàn tay",visual:"✋"},
-  {hanzi:"头",pinyin:"tou",meaning:"Cái đầu",visual:"🗣️"},
-  {hanzi:"眼睛",pinyin:"yan jing",meaning:"Mắt",visual:"👀"},
-  {hanzi:"耳朵",pinyin:"er duo",meaning:"Tai",visual:"👂"},
-  {hanzi:"嘴",pinyin:"zui",meaning:"Miệng",visual:"👄"},
-  {hanzi:"脚",pinyin:"jiao",meaning:"Bàn chân",visual:"🦶"},
-  // Nature / Weather
-  {hanzi:"太阳",pinyin:"tai yang",meaning:"Mặt trời",visual:"☀️"},
-  {hanzi:"月亮",pinyin:"yue liang",meaning:"Mặt trăng",visual:"🌙"},
-  {hanzi:"星星",pinyin:"xing xing",meaning:"Ngôi sao",visual:"⭐"},
-  {hanzi:"花",pinyin:"hua",meaning:"Bông hoa",visual:"🌸"},
-  {hanzi:"树",pinyin:"shu",meaning:"Cái cây",visual:"🌳"},
-  {hanzi:"山",pinyin:"shan",meaning:"Núi",visual:"⛰️"},
-  {hanzi:"雨",pinyin:"yu",meaning:"Mưa",visual:"🌧️"},
-  // Actions
-  {hanzi:"吃",pinyin:"chi",meaning:"Ăn",visual:"🍽️"},
-  {hanzi:"喝",pinyin:"he",meaning:"Uống",visual:"🥤"},
-  {hanzi:"看",pinyin:"kan",meaning:"Nhìn / Xem",visual:"👁️"},
-  {hanzi:"听",pinyin:"ting",meaning:"Nghe",visual:"👂"},
-  {hanzi:"说",pinyin:"shuo",meaning:"Nói",visual:"💬"},
-  {hanzi:"走",pinyin:"zou",meaning:"Đi bộ",visual:"🚶"},
-  {hanzi:"跑",pinyin:"pao",meaning:"Chạy",visual:"🏃"},
-  {hanzi:"写",pinyin:"xie",meaning:"Viết",visual:"✍️"},
-  {hanzi:"读",pinyin:"du",meaning:"Đọc",visual:"📖"},
-  {hanzi:"学",pinyin:"xue",meaning:"Học",visual:"📚"},
-  {hanzi:"玩",pinyin:"wan",meaning:"Chơi",visual:"🎮"},
-  {hanzi:"睡觉",pinyin:"shui jiao",meaning:"Ngủ",visual:"😴"},
-  // Adjectives
-  {hanzi:"大",pinyin:"da",meaning:"To / Lớn",visual:"🔷"},
-  {hanzi:"小",pinyin:"xiao",meaning:"Nhỏ / Bé",visual:"🔹"},
-  {hanzi:"好",pinyin:"hao",meaning:"Tốt / Hay",visual:"👍"},
-  {hanzi:"多",pinyin:"duo",meaning:"Nhiều",visual:"📦"},
-  {hanzi:"少",pinyin:"shao",meaning:"Ít",visual:"📌"},
-  {hanzi:"快",pinyin:"kuai",meaning:"Nhanh",visual:"⚡"},
-  {hanzi:"慢",pinyin:"man",meaning:"Chậm",visual:"🐌"},
-  {hanzi:"高",pinyin:"gao",meaning:"Cao",visual:"📏"},
-  {hanzi:"热",pinyin:"re",meaning:"Nóng",visual:"🔥"},
-  {hanzi:"冷",pinyin:"leng",meaning:"Lạnh",visual:"🧊"},
-  // Time
-  {hanzi:"今天",pinyin:"jin tian",meaning:"Hôm nay",visual:"📅"},
-  {hanzi:"明天",pinyin:"ming tian",meaning:"Ngày mai",visual:"📆"},
-  {hanzi:"昨天",pinyin:"zuo tian",meaning:"Hôm qua",visual:"📅"},
-  // People
-  {hanzi:"朋友",pinyin:"peng you",meaning:"Bạn bè",visual:"🤝"},
-  {hanzi:"老师",pinyin:"lao shi",meaning:"Thầy/Cô giáo",visual:"👩‍🏫"},
-  {hanzi:"学生",pinyin:"xue sheng",meaning:"Học sinh",visual:"🧑‍🎓"},
-  {hanzi:"男孩",pinyin:"nan hai",meaning:"Con trai",visual:"👦"},
-  {hanzi:"女孩",pinyin:"nv hai",meaning:"Con gái",visual:"👧"},
+  {hanzi:"桌子",pinyin:"zhuo zi",meaning:"Cái bàn",visual:"🪑"}
 ];
 
 function generateChinese(){
@@ -304,6 +201,7 @@ const POINTS_PER_CORRECT = 10;
 const CORRECT_PER_BADGE = 20;
 
 let currentSubject = null; // "english" | "math" | "chinese"
+let currentMathCategory = "all"; // for math sub-categories
 let currentCase = null;
 let hintLevel = 0;
 let isSubmitted = false;
@@ -325,6 +223,7 @@ const $=id=>document.getElementById(id);
 
 const welcomeScreen  = $('welcomeScreen');
 const subjectScreen  = $('subjectScreen');
+const mathCategoryScreen = $('mathCategoryScreen');
 const exerciseScreen = $('exerciseScreen');
 const rewardScreen   = $('rewardScreen');
 
@@ -360,8 +259,10 @@ const currentSubjectBadge = $('currentSubjectBadge');
 
 // ======================== NAVIGATION ========================
 function showScreen(screen){
-  [welcomeScreen,subjectScreen,exerciseScreen,rewardScreen].forEach(s=>s.classList.add('hidden'));
-  screen.classList.remove('hidden');
+  [welcomeScreen,subjectScreen,mathCategoryScreen,exerciseScreen,rewardScreen].forEach(s=>{
+      if(s) s.classList.add('hidden');
+  });
+  if(screen) screen.classList.remove('hidden');
 }
 
 function updateSubjectProgress(){
@@ -382,13 +283,29 @@ $('startBtn').addEventListener('click',()=>{
 // Subject → Welcome
 $('backToWelcome').addEventListener('click',()=>showScreen(welcomeScreen));
 
-// Subject card click → Exercise
-document.querySelectorAll('.subject-card').forEach(card=>{
+// Subject card click
+document.querySelectorAll('.subject-screen:not(#mathCategoryScreen) .subject-card').forEach(card=>{
   card.addEventListener('click',()=>{
     currentSubject=card.dataset.subject;
-    startExercise();
+    if(currentSubject === "math") {
+        showScreen(mathCategoryScreen);
+    } else {
+        startExercise();
+    }
   });
 });
+
+// Math Category click
+if($('mathCategoryScreen')) {
+    document.querySelectorAll('#mathCategoryScreen .subject-card').forEach(card=>{
+      card.addEventListener('click',()=>{
+        currentSubject = "math";
+        currentMathCategory = card.dataset.mathCat;
+        startExercise();
+      });
+    });
+    $('backToSubjectsFromMath').addEventListener('click',()=>showScreen(subjectScreen));
+}
 
 // Exercise → Subject
 $('backToSubjects').addEventListener('click',()=>{
@@ -416,7 +333,7 @@ function startExercise(){
   // Set answer label
   if(currentSubject==="chinese") answerLabel.textContent="Gõ Pinyin (không dấu):";
   else if(currentSubject==="math") answerLabel.textContent="Gõ đáp án (số):";
-  else answerLabel.textContent="Gõ từ điền vào chỗ trống:";
+  else answerLabel.textContent="Gõ đáp án (có thể là câu dài):";
 
   // Show/hide speech button
   speechBtn.style.display=(currentSubject==="english")?"flex":"none";
@@ -439,7 +356,12 @@ function speakText(text){
   u.onerror=()=>speechBtn.classList.remove('playing');
   window.speechSynthesis.speak(u);
 }
-speechBtn.addEventListener('click',()=>{if(currentCase&&currentSubject==="english")speakText(currentCase.dialogue.replace("______","blank"));});
+speechBtn.addEventListener('click',()=>{
+    if(currentCase&&currentSubject==="english"){
+        let txt = currentCase.dialogue.replace("______","blank").replace(/\[.*?\]/g, "");
+        speakText(txt);
+    }
+});
 if('speechSynthesis' in window){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
 
 // ======================== LOGIC ========================
@@ -476,7 +398,7 @@ function scramble(w){const a=w.split('');for(let i=a.length-1;i>0;i--){const j=M
 
 function loadNewCase(){
   if(currentSubject==="english") currentCase=generateEnglish();
-  else if(currentSubject==="math") currentCase=generateMath();
+  else if(currentSubject==="math") currentCase=generateMath(currentMathCategory);
   else currentCase=generateChinese();
 
   hintLevel=0;
@@ -493,7 +415,7 @@ function loadNewCase(){
   exAvatar.textContent=currentCase.emoji||"🕵️";
   caseType.textContent=currentCase.type;
   caseTitle.textContent=currentCase.title;
-  caseDialogue.textContent=currentCase.dialogue;
+  caseDialogue.innerText=currentCase.dialogue; // innerText to render newlines for scrambled sentences
   caseExplanation.textContent=currentCase.explanation;
 
   // Hide hanzi box
@@ -509,7 +431,7 @@ function loadNewCase(){
   explanationBox.classList.add('hidden');
   nextActionBox.classList.add('hidden');
 
-  document.querySelector('.exercise-wrap').scrollTo?.({top:0,behavior:'smooth'});
+  document.querySelector('.exercise-wrap')?.scrollTo?.({top:0,behavior:'smooth'});
   window.scrollTo({top:0,behavior:'smooth'});
   setTimeout(()=>answerInput.focus(),300);
 
@@ -521,23 +443,42 @@ hintBtn.addEventListener('click',()=>{
   if(!currentCase||isSubmitted)return;
   const ans=currentCase.correct;
   hintLevel++;
-  if(hintLevel===1){
-    hintDisplay.textContent='📏 '+ans.split('').map(c=>c===' '?' ':'_').join(' ');
-  }else if(hintLevel===2){
-    hintDisplay.textContent='🔤 '+ans[0]+' '+ans.slice(1).split('').map(c=>c===' '?' ':'_').join(' ');
-  }else{
-    hintDisplay.textContent='✅ '+ans;
+  
+  if(currentSubject === "english" && currentCase.type === "Sắp xếp câu") {
+      // For sentences, hints are different
+      if(hintLevel === 1) hintDisplay.textContent = '📏 Có ' + ans.split(' ').length + ' từ';
+      else if(hintLevel === 2) hintDisplay.textContent = '🔤 Bắt đầu bằng: ' + ans.split(' ')[0];
+      else hintDisplay.textContent = '✅ ' + ans;
+  } else {
+      if(hintLevel===1){
+        hintDisplay.textContent='📏 '+ans.split('').map(c=>c===' '?' ':'_').join(' ');
+      }else if(hintLevel===2){
+        hintDisplay.textContent='🔤 '+ans[0]+' '+ans.slice(1).split('').map(c=>c===' '?' ':'_').join(' ');
+      }else{
+        hintDisplay.textContent='✅ '+ans;
+      }
   }
 });
 
 answerForm.addEventListener('submit',e=>{
   e.preventDefault();
   if(isSubmitted)return;
-  const userAns=answerInput.value.trim().toLowerCase();
+  
+  let userAns=answerInput.value.trim();
   if(!userAns)return;
 
-  const correctAns=currentCase.correct.toLowerCase();
-  const isCorrect=userAns===correctAns;
+  let isCorrect = false;
+  
+  if (currentSubject === "math") {
+      // Accept both dot and comma for decimals in math
+      userAns = userAns.replace(',', '.');
+      isCorrect = (userAns === currentCase.correct);
+  } else if (currentSubject === "english") {
+      // Normalize English to ignore punctuation and case
+      isCorrect = (normalizeAnswer(userAns) === normalizeAnswer(currentCase.correct));
+  } else {
+      isCorrect = (userAns.toLowerCase() === currentCase.correct.toLowerCase());
+  }
 
   isSubmitted=true;
   answerInput.disabled=true;
