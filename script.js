@@ -269,7 +269,9 @@ function saveProgress(subj,data){
   // Lưu lên Đám mây
   if (isFirebaseReady && currentUser) {
       db.collection("users").doc(currentUser.uid).set({
-          [key]: data
+          [key]: data,
+          email: currentUser.email,
+          lastActive: new Date().toISOString()
       }, {merge: true}).catch(err => console.log("Lỗi lưu mây:", err));
   }
 }
@@ -278,8 +280,8 @@ function getProgress(subj){return loadProgress(subj);}
 // ======================== DOM ========================
 const $=id=>document.getElementById(id);
 
-const authScreen=$('authScreen'), authForm=$('authForm'), authEmail=$('authEmail'), authPassword=$('authPassword'), authError=$('authError'), userProfileBadge=$('userProfileBadge');
-const welcomeScreen=$('welcomeScreen'), subjectScreen=$('subjectScreen'), mathCategoryScreen=$('mathCategoryScreen'), exerciseScreen=$('exerciseScreen'), rewardScreen=$('rewardScreen');
+const authScreen=$('authScreen'), authForm=$('authForm'), authEmail=$('authEmail'), authPassword=$('authPassword'), authError=$('authError'), userProfileBadge=$('userProfileBadge'), logoutBtn=$('logoutBtn'), guestLeaderboardBtn=$('guestLeaderboardBtn');
+const welcomeScreen=$('welcomeScreen'), subjectScreen=$('subjectScreen'), mathCategoryScreen=$('mathCategoryScreen'), exerciseScreen=$('exerciseScreen'), rewardScreen=$('rewardScreen'), leaderboardScreen=$('leaderboardScreen');
 
 const pointsDisplay=$('pointsDisplay'), badgesDisplay=$('badgesDisplay'), rankDisplay=$('rankDisplay'), progressBar=$('progressBar'), progressPercent=$('progressPercent');
 const exVisual=$('exVisual'), exVisualEmoji=$('exVisualEmoji'), exAvatar=$('exAvatar'), caseType=$('caseType'), caseTitle=$('caseTitle'), caseDialogue=$('caseDialogue'), speechBtn=$('speechBtn');
@@ -290,7 +292,7 @@ const feedbackBox=$('feedbackBox'), feedbackText=$('feedbackText'), explanationB
 
 // ======================== NAVIGATION ========================
 function showScreen(screen){
-  [authScreen,welcomeScreen,subjectScreen,mathCategoryScreen,exerciseScreen,rewardScreen].forEach(s=>s&&s.classList.add('hidden'));
+  [authScreen,welcomeScreen,subjectScreen,mathCategoryScreen,exerciseScreen,rewardScreen,leaderboardScreen].forEach(s=>s&&s.classList.add('hidden'));
   if(screen) screen.classList.remove('hidden');
 }
 
@@ -349,6 +351,95 @@ if (isFirebaseReady) {
             }
         });
         showScreen(welcomeScreen);
+    });
+}
+
+if(logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        if(isFirebaseReady && auth) {
+            auth.signOut();
+        } else {
+            currentUser = null;
+            userProgress = {};
+            showScreen(authScreen);
+        }
+    });
+}
+
+const leaderboardBtn = $('leaderboardBtn');
+const leaderboardList = $('leaderboardList');
+const backFromLeaderboard = $('backFromLeaderboard');
+
+if (leaderboardBtn) {
+    leaderboardBtn.addEventListener('click', () => {
+        showScreen(leaderboardScreen);
+        renderLeaderboard();
+    });
+}
+if (guestLeaderboardBtn) {
+    guestLeaderboardBtn.addEventListener('click', () => {
+        showScreen(leaderboardScreen);
+        renderLeaderboard();
+    });
+}
+if (backFromLeaderboard) {
+    backFromLeaderboard.addEventListener('click', () => {
+        if (currentUser) showScreen(welcomeScreen);
+        else showScreen(authScreen);
+    });
+}
+
+function renderLeaderboard() {
+    if (!isFirebaseReady) {
+        leaderboardList.innerHTML = `<div style="text-align:center; padding: 20px;">Tính năng này yêu cầu tải ứng dụng lên Firebase.</div>`;
+        return;
+    }
+    leaderboardList.innerHTML = `<div style="text-align:center; padding: 20px;">Đang tải dữ liệu đám mây... ⏳</div>`;
+    
+    db.collection("users").get().then(snapshot => {
+        let players = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (!data.email) return;
+            
+            // Tính tổng điểm tất cả các môn của bé này
+            let totalPts = 0;
+            Object.keys(data).forEach(k => {
+                if (k.startsWith('conan_') && data[k].points) {
+                    totalPts += data[k].points;
+                }
+            });
+            
+            players.push({
+                email: data.email.split('@')[0],
+                score: totalPts
+            });
+        });
+        
+        // Sắp xếp điểm giảm dần
+        players.sort((a,b) => b.score - a.score);
+        
+        if (players.length === 0) {
+            leaderboardList.innerHTML = `<div style="text-align:center; padding: 20px;">Chưa có dữ liệu thám tử nào.</div>`;
+            return;
+        }
+        
+        leaderboardList.innerHTML = players.map((p, index) => {
+            let rankHtml = `<div class="lb-rank">${index + 1}</div>`;
+            if(index === 0) rankHtml = `<div class="lb-rank" style="background: #fbbf24;">🥇</div>`;
+            if(index === 1) rankHtml = `<div class="lb-rank" style="background: #9ca3af;">🥈</div>`;
+            if(index === 2) rankHtml = `<div class="lb-rank" style="background: #b45309;">🥉</div>`;
+            
+            return `
+            <div class="lb-item">
+                ${rankHtml}
+                <div class="lb-name">${p.email}</div>
+                <div class="lb-score">${p.score} 💰</div>
+            </div>
+            `;
+        }).join('');
+    }).catch(err => {
+        leaderboardList.innerHTML = `<div style="text-align:center; color: red; padding: 20px;">Lỗi tải dữ liệu!</div>`;
     });
 }
 

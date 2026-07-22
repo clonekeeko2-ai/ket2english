@@ -7,7 +7,7 @@
     <meta name="description" content="Ứng dụng học 10 môn cho trẻ em">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=10">
 
     <!-- Firebase v8 Compat -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -35,6 +35,7 @@
                 </div>
                 <div id="authError" class="auth-error hidden"></div>
                 <button type="submit" id="loginBtn" class="btn btn-navy btn-full" style="margin-top:12px;">🚀 Bắt Đầu / Đăng Ký</button>
+                <button type="button" id="guestLeaderboardBtn" class="btn btn-ghost btn-full" style="margin-top:8px;">🏆 Xem Bảng Xếp Hạng Khách</button>
                 <p style="font-size:0.8rem; color:var(--text-light); margin-top:16px;">*Nếu chưa có tài khoản, hệ thống sẽ tự động tạo mới với Email và Mật khẩu bạn vừa nhập.</p>
             </form>
         </div>
@@ -43,6 +44,7 @@
     <!-- ========== 1. WELCOME SCREEN ========== -->
     <div id="welcomeScreen" class="screen welcome-screen hidden">
         <div class="welcome-inner">
+            <button id="logoutBtn" style="position: absolute; top: 16px; left: 16px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 100px; font-weight: 600; cursor: pointer; z-index: 10;">🚪 Đăng Xuất</button>
             <div class="user-profile-badge" id="userProfileBadge">Bé: ...</div>
             <div class="welcome-badge">🕵️‍♂️</div>
             <h1 class="welcome-title">TRẠI HUẤN LUYỆN<br>THÁM TỬ</h1>
@@ -54,6 +56,7 @@
                 <div class="photo-play-icon">▶</div>
             </div>
             <p class="welcome-tap">👆 Nhấn vào ảnh để bắt đầu!</p>
+            <button id="leaderboardBtn" class="btn btn-navy" style="margin-top: 16px; width: auto; padding: 10px 20px;">🏆 Bảng Xếp Hạng</button>
         </div>
     </div>
 
@@ -160,6 +163,18 @@
         </div>
     </div>
 
+    <!-- ========== 5. LEADERBOARD SCREEN ========== -->
+    <div id="leaderboardScreen" class="screen subject-screen hidden">
+        <div class="subject-inner">
+            <h1 class="subject-heading">🏆 BẢNG VÀNG THÁM TỬ</h1>
+            <p class="subject-sub">Top những thám tử xuất sắc nhất</p>
+            <div id="leaderboardList" class="leaderboard-list">
+                <!-- Data injected here -->
+            </div>
+            <button id="backFromLeaderboard" class="btn btn-ghost" style="margin-top:20px;">← Về Trang Chủ</button>
+        </div>
+    </div>
+
     <!-- ========== 3. EXERCISE SCREEN ========== -->
     <div id="exerciseScreen" class="screen hidden">
         <div class="exercise-wrap">
@@ -257,6 +272,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=7"></script>
+    <script src="script.js?v=10"></script>
 </body>
 </html>

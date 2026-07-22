@@ -42,10 +42,33 @@ body {
 .btn-circle { width: 48px; height: 48px; border-radius: 50%; padding: 0; background: var(--bg-light); color: var(--text); font-size: 1.2rem; }
 .btn-hint { background: var(--gold); color: var(--navy); padding: 12px; }
 
+/* === 0. AUTH SCREEN === */
+.auth-screen {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a365d 100%);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.auth-card {
+    background: #fff; width: 100%; max-width: 400px; border-radius: 24px; overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,.3); text-align: center; animation: pop .4s ease-out;
+}
+.auth-header { background: var(--bg); padding: 30px 20px 20px; border-bottom: 1px solid var(--border); }
+.auth-header h2 { font-size: 1.5rem; color: var(--navy); margin: 12px 0 8px; }
+.auth-header p { color: var(--text-light); font-size: .9rem; margin: 0; }
+.auth-body { padding: 30px 24px; display: flex; flex-direction: column; gap: 16px; }
+.auth-input-group { text-align: left; }
+.auth-input-group label { display: block; font-weight: 700; color: var(--navy); font-size: .85rem; margin-bottom: 8px; margin-left: 4px; }
+.auth-input-group input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border); font-size: 1rem; transition: border-color .2s; }
+.auth-input-group input:focus { outline: none; border-color: var(--navy); }
+.auth-error { color: var(--red); font-size: .85rem; font-weight: 600; padding: 10px; background: #fee2e2; border-radius: 8px; margin-top: -8px; }
+
 /* === 1. WELCOME SCREEN === */
 .welcome-screen {
     background: linear-gradient(135deg, var(--navy) 0%, #1a365d 100%);
-    color: #fff; display: flex; align-items: center; justify-content: center; text-align: center;
+    color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; position: relative;
+}
+.user-profile-badge {
+    position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.2);
+    padding: 8px 16px; border-radius: 100px; font-weight: 700; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.3);
 }
 .welcome-inner { padding: 20px; }
 .welcome-badge { font-size: 4rem; margin-bottom: 10px; animation: bounce 2s infinite; }
