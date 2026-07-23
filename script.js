@@ -288,7 +288,6 @@ function generateTheory(subj) {
         available = pool;
     }
     const q = pick(available);
-    const emojiStr = subjectMeta[subj] ? subjectMeta[subj].emoji : "📚";
     return {...q, emoji: emojiStr, subject: subj};
 }
 
