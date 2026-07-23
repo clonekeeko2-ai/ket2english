@@ -268,7 +268,7 @@ function generateTheory(subj) {
         let t = q.term;
         if (t === 1) t = "Học Kỳ 1";
         if (t === 2) t = "Học Kỳ 2";
-        return (t === undefined || t === null || t === 0 || t === "Cả năm" || t === currentTerm);
+        return (t === undefined || t === null || t === 0 || t === "Cả năm" || t === "Mặc định" || t === currentTerm);
     });
 
     // Lọc theo chương học
@@ -646,13 +646,15 @@ function buildTheoryCategoryScreen(subj) {
     const grid = $('theoryCategoryGrid');
     grid.innerHTML = '';
     
+    let termDisplay = currentTerm.includes("Học Kỳ") ? " " + currentTerm : (currentTerm === "Mặc định" || currentTerm === "Cả năm" ? "" : " " + currentTerm);
+    
     // Nút "Tất cả các chương"
     const allBtn = document.createElement('button');
     allBtn.className = `subject-card card-${subj}`;
     allBtn.innerHTML = `
         <span class="sc-emoji">📚</span>
         <div class="card-content">
-            <span class="sc-name">Tổng Hợp HK${currentTerm}</span>
+            <span class="sc-name">Tổng Hợp${termDisplay}</span>
             <span class="sc-desc">Ôn tập tất cả</span>
         </div>
     `;
@@ -668,7 +670,7 @@ function buildTheoryCategoryScreen(subj) {
         let t = q.term;
         if (t === 1) t = "Học Kỳ 1";
         if (t === 2) t = "Học Kỳ 2";
-        if (t !== 0 && t !== null && t !== undefined && t !== "Cả năm") {
+        if (t !== 0 && t !== null && t !== undefined && t !== "Cả năm" && t !== "Mặc định") {
             uniqueTerms.add(t.toString());
         }
     });
@@ -702,7 +704,7 @@ function buildTheoryCategoryScreen(subj) {
         let t = q.term;
         if (t === 1) t = "Học Kỳ 1";
         if (t === 2) t = "Học Kỳ 2";
-        return (t === undefined || t === null || t === 0 || t === "Cả năm" || t === currentTerm);
+        return (t === undefined || t === null || t === 0 || t === "Cả năm" || t === "Mặc định" || t === currentTerm);
     });
 
     let types = [...new Set(pool.map(q => q.type))].filter(t => t);
@@ -781,7 +783,7 @@ function loadNewCase(){
               let t = q.term;
               if (t === 1) t = "Học Kỳ 1";
               if (t === 2) t = "Học Kỳ 2";
-              if (t !== undefined && t !== null && t !== 0 && t !== "Cả năm" && t !== currentTerm) return false;
+              if (t !== undefined && t !== null && t !== 0 && t !== "Cả năm" && t !== "Mặc định" && t !== currentTerm) return false;
               return true;
           });
 
