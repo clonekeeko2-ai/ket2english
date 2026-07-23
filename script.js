@@ -694,7 +694,7 @@ function loadNewCase(){
   caseType.textContent=currentCase.type; caseTitle.textContent=currentCase.title;
   caseDialogue.innerText=currentCase.dialogue; caseExplanation.innerHTML=currentCase.explanation;
   hanziBox.classList.add('hidden'); hintDisplay.textContent='';
-  feedbackModal.classList.add('hidden');
+  feedbackModal.style.display = 'none';
   feedbackBox.classList.remove('correct','incorrect');
   explanationBox.classList.add('hidden');
 
@@ -754,7 +754,7 @@ function evaluateAnswer(isCorrect) {
   if(currentSubject==="chinese"&&currentCase.hanzi){ hanziChar.textContent=currentCase.hanzi; hanziPinyin.textContent=currentCase.pinyinDisplay; hanziBox.classList.remove('hidden'); }
   if(currentCase.explanation) explanationBox.classList.remove('hidden');
   else explanationBox.classList.add('hidden');
-  feedbackModal.classList.remove('hidden');
+  feedbackModal.style.display = 'flex';
   updateDashboard();
 }
 
@@ -851,6 +851,6 @@ if('speechSynthesis' in window){window.speechSynthesis.onvoiceschanged=()=>windo
 
 // Next Case Button
 nextCaseBtn.addEventListener('click', () => {
-    feedbackModal.classList.add('hidden');
+    feedbackModal.style.display = 'none';
     loadNewCase();
 });
