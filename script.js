@@ -198,7 +198,11 @@ function seedTheoryToFirebase() {
 function loadTheoryDB() {
     if(!isFirebaseReady || !db) return;
     db.collection("theory_questions").get().then(snap => {
-        if(snap.empty) { seedTheoryToFirebase(); return; }
+        if(snap.empty) {
+            // Collection rỗng - không tự seed, để Admin chủ động upload dữ liệu
+            console.log("Theory DB rỗng. Vui lòng upload dữ liệu qua admin_upload.html");
+            return;
+        }
         snap.forEach(doc => {
             let data = doc.data();
             if(data.subject && DB_THEORY[data.subject]) {

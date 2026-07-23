@@ -1,5 +1,5 @@
 // ⚡ CACHE VERSION - Tăng số này mỗi khi deploy code mới để xóa cache cũ
-const CACHE_NAME = 'thamtu-lop5-v16';
+const CACHE_NAME = 'thamtu-lop5-v17';
 const urlsToCache = [
   './',
   './index.html',
