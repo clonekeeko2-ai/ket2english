@@ -198,11 +198,16 @@ body {
 .hanzi-char { font-size: 4rem; line-height: 1; margin-bottom: 8px; display: block; font-weight: 400; font-family: "KaiTi", "STKaiti", serif; }
 .hanzi-pinyin { font-size: 1.2rem; color: var(--gold); }
 
+/* Modal Phản hồi */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px; transition: opacity 0.3s; }
+.modal-content { background: #f8fafc; width: 100%; max-width: 480px; border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; gap: 16px; }
+
 /* Feedback */
-.feedback-box { padding: 16px; border-radius: 16px; text-align: center; font-weight: 700; margin-bottom: 16px; animation: pop .4s ease-out; }
+.feedback-box { padding: 16px; border-radius: 16px; text-align: center; font-weight: 700; font-size: 1.2rem; }
 .feedback-box.correct { background: #dcfce7; color: #15803d; border: 2px solid #86efac; }
 .feedback-box.incorrect { background: #fee2e2; color: #b91c1c; border: 2px solid #fca5a5; }
-.explanation-box { background: #fff; padding: 16px; border-radius: 16px; border-left: 4px solid var(--gold); margin-bottom: 16px; font-size: .95rem; box-shadow: var(--shadow); }
+.explanation-box { background: #fff; padding: 16px; border-radius: 16px; border-left: 4px solid var(--gold); font-size: 1rem; box-shadow: var(--shadow); color: var(--text); }
+.modal-footer { margin-top: 8px; }
 
 /* === 4. REWARD SCREEN === */
 .reward-screen { background: rgba(10,31,68,.95); display: flex; align-items: center; justify-content: center; padding: 20px; position: fixed; top: 0; left: 0; z-index: 1000; }

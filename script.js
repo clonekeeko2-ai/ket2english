@@ -346,7 +346,7 @@ const exVisual=$('exVisual'), exVisualEmoji=$('exVisualEmoji'), exAvatar=$('exAv
 const hanziBox=$('hanziBox'), hanziChar=$('hanziChar'), hanziPinyin=$('hanziPinyin');
 const answerForm=$('answerForm'), answerInput=$('answerInput'), submitBtn=$('submitBtn'), answerLabel=$('answerLabel'), hintBtn=$('hintBtn'), hintDisplay=$('hintDisplay');
 const mcqContainer=$('mcqContainer'), mcqGrid=$('mcqGrid');
-const feedbackBox=$('feedbackBox'), feedbackText=$('feedbackText'), explanationBox=$('explanationBox'), caseExplanation=$('caseExplanation'), nextActionBox=$('nextActionBox'), nextCaseBtn=$('nextCaseBtn'), currentSubjectBadge=$('currentSubjectBadge');
+const feedbackBox=$('feedbackBox'), feedbackText=$('feedbackText'), explanationBox=$('explanationBox'), caseExplanation=$('caseExplanation'), feedbackModal=$('feedbackModal'), nextCaseBtn=$('nextCaseBtn'), currentSubjectBadge=$('currentSubjectBadge');
 
 // ======================== NAVIGATION ========================
 function showScreen(screen){
@@ -694,8 +694,8 @@ function loadNewCase(){
   caseType.textContent=currentCase.type; caseTitle.textContent=currentCase.title;
   caseDialogue.innerText=currentCase.dialogue; caseExplanation.innerHTML=currentCase.explanation;
   hanziBox.classList.add('hidden'); hintDisplay.textContent='';
-  feedbackBox.classList.add('hidden'); feedbackBox.classList.remove('correct','incorrect');
-  explanationBox.classList.add('hidden'); nextActionBox.classList.add('hidden');
+  feedbackModal.classList.add('hidden'); feedbackBox.classList.remove('correct','incorrect');
+  explanationBox.classList.remove('hidden');
 
   // UI Toggle: MCQ vs Text Input
   const isTextInput = currentCase.questionFormat === 'text_input' || !currentCase.options;
@@ -751,7 +751,7 @@ function evaluateAnswer(isCorrect) {
   
   saveProgress(currentSubject,prog);
   if(currentSubject==="chinese"&&currentCase.hanzi){ hanziChar.textContent=currentCase.hanzi; hanziPinyin.textContent=currentCase.pinyinDisplay; hanziBox.classList.remove('hidden'); }
-  explanationBox.classList.remove('hidden'); nextActionBox.classList.remove('hidden');
+  feedbackModal.classList.remove('hidden');
   updateDashboard();
 }
 
@@ -845,4 +845,9 @@ speechBtn.addEventListener('click',()=>{
     if(currentCase&&currentSubject==="english") speakText(currentCase.dialogue.replace("______","blank").replace(/\[.*?\]/g, ""));
 });
 if('speechSynthesis' in window){window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
-nextCaseBtn.addEventListener('click',loadNewCase);
+
+// Next Case Button
+nextCaseBtn.addEventListener('click', () => {
+    feedbackModal.classList.add('hidden');
+    loadNewCase();
+});

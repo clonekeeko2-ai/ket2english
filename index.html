@@ -260,24 +260,31 @@
                     <div id="hintDisplay" class="hint-display"></div>
                 </form>
                 
-                <!-- Chinese Hanzi Box -->
+
+            </div>
+        </div>
+
+        <!-- POPUP FEEDBACK MODAL -->
+        <div id="feedbackModal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div id="feedbackBox" class="feedback-box">
+                    <div id="feedbackText" class="feedback-text"></div>
+                </div>
+                
+                <!-- Chinese Hanzi Box in Modal -->
                 <div id="hanziBox" class="hanzi-box hidden">
                     <div id="hanziChar" class="hanzi-char"></div>
                     <div id="hanziPinyin" class="hanzi-pinyin"></div>
                 </div>
 
-                <!-- Feedback & Next Button -->
-                <div id="feedbackBox" class="feedback-box hidden">
-                    <div id="feedbackText" class="feedback-text"></div>
-                </div>
                 <div id="explanationBox" class="explanation-box hidden">
                     <strong>💡 Giải thích:</strong>
                     <div id="caseExplanation"></div>
                 </div>
-                <div id="nextActionBox" class="next-action-box hidden">
-                    <button type="button" id="nextCaseBtn" class="btn btn-navy btn-full">⏭️ CÂU TIẾP THEO</button>
+                
+                <div class="modal-footer">
+                    <button type="button" id="nextCaseBtn" class="btn btn-navy btn-full" style="font-size: 1.1rem; padding: 16px;">⏭️ CÂU TIẾP THEO</button>
                 </div>
-
             </div>
         </div>
     </div>
