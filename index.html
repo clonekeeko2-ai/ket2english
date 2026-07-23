@@ -73,48 +73,14 @@
         <div class="subject-inner">
             <h1 class="subject-heading">Chọn Môn Học</h1>
             <p class="subject-sub">Hôm nay thám tử muốn luyện gì?</p>
-            <div class="subject-grid">
+            <div class="subject-grid" id="subjectGrid">
                 <!-- Group 1: Required Subjects (New) -->
-                <button class="subject-card card-vietnamese" data-subject="vietnamese">
-                    <span class="sc-emoji">📝</span>
-                    <span class="sc-name">Tiếng Việt</span>
-                    <span class="sc-desc">Chính tả, từ và câu</span>
-                </button>
                 <button class="subject-card card-math" data-subject="math">
                     <span class="sc-emoji">🔢</span>
                     <span class="sc-name">Toán Học</span>
                     <span class="sc-desc">Đại số, hình học</span>
                 </button>
-                <button class="subject-card card-science" data-subject="science">
-                    <span class="sc-emoji">🔬</span>
-                    <span class="sc-name">Khoa Học</span>
-                    <span class="sc-desc">Tự nhiên, môi trường</span>
-                </button>
-                <button class="subject-card card-history" data-subject="history">
-                    <span class="sc-emoji">🗺️</span>
-                    <span class="sc-name">Lịch Sử - Địa Lí</span>
-                    <span class="sc-desc">Việt Nam & Thế giới</span>
-                </button>
-                <button class="subject-card card-ethics" data-subject="ethics">
-                    <span class="sc-emoji">🤝</span>
-                    <span class="sc-name">Đạo Đức</span>
-                    <span class="sc-desc">Bài học làm người</span>
-                </button>
-                <button class="subject-card card-informatics" data-subject="informatics">
-                    <span class="sc-emoji">💻</span>
-                    <span class="sc-name">Tin Học & Công Nghệ</span>
-                    <span class="sc-desc">Máy tính, ứng dụng</span>
-                </button>
-                <button class="subject-card card-english" data-subject="english">
-                    <span class="sc-emoji">🔤</span>
-                    <span class="sc-name">Ngoại Ngữ 1</span>
-                    <span class="sc-desc">Tiếng Anh KET</span>
-                </button>
-                <button class="subject-card card-chinese" data-subject="chinese">
-                    <span class="sc-emoji">🀄</span>
-                    <span class="sc-name">Ngoại Ngữ 2</span>
-                    <span class="sc-desc">Tiếng Trung (Pinyin)</span>
-                </button>
+                <!-- Dữ liệu môn học khác sẽ được JS tự động thêm vào đây -->
             </div>
             <button id="backToWelcome" class="btn btn-ghost" style="margin-top:16px;">← Về Trang Chủ</button>
         </div>
@@ -177,9 +143,8 @@
             <h1 id="theoryCategoryHeading" class="subject-heading">Chọn Chương Học</h1>
             <p class="subject-sub">Chọn bài học trên lớp để luyện tập nhé</p>
             
-            <div class="term-tabs">
-                <button id="tabTerm1" class="term-tab active">Học Kỳ 1</button>
-                <button id="tabTerm2" class="term-tab">Học Kỳ 2</button>
+            <div class="term-tabs" id="termTabsContainer">
+                <!-- Dynamically injected via JS -->
             </div>
 
             <div id="theoryCategoryGrid" class="subject-grid">
@@ -305,7 +270,7 @@
         </div>
     </div>
 
-    <script src="script.js?v=15"></script>
+    <script src="script.js?v=19"></script>
     
     <script>
       if ('serviceWorker' in navigator) {

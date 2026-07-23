@@ -138,6 +138,7 @@ body {
 .card-history { border-color: #b45309; } .card-history .sc-name { color: #b45309; }
 .card-ethics { border-color: #ec4899; } .card-ethics .sc-name { color: #ec4899; }
 .card-informatics { border-color: #3b82f6; } .card-informatics .sc-name { color: #3b82f6; }
+.card-custom { border-color: #64748b; } .card-custom .sc-name { color: #475569; }
 
 /* === 3. EXERCISE (Full-Viewport, No Scroll) === */
 .exercise-wrap {
