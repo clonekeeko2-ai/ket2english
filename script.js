@@ -694,8 +694,9 @@ function loadNewCase(){
   caseType.textContent=currentCase.type; caseTitle.textContent=currentCase.title;
   caseDialogue.innerText=currentCase.dialogue; caseExplanation.innerHTML=currentCase.explanation;
   hanziBox.classList.add('hidden'); hintDisplay.textContent='';
-  feedbackModal.classList.add('hidden'); feedbackBox.classList.remove('correct','incorrect');
-  explanationBox.classList.remove('hidden');
+  feedbackModal.classList.add('hidden');
+  feedbackBox.classList.remove('correct','incorrect');
+  explanationBox.classList.add('hidden');
 
   // UI Toggle: MCQ vs Text Input
   const isTextInput = currentCase.questionFormat === 'text_input' || !currentCase.options;
@@ -728,7 +729,7 @@ function loadNewCase(){
 function evaluateAnswer(isCorrect) {
   isSubmitted=true;
   const prog=getProgress(currentSubject);
-  feedbackBox.classList.remove('hidden','correct','incorrect');
+  feedbackBox.classList.remove('correct','incorrect');
   
   if(isCorrect){
     playSound('correct');
@@ -751,6 +752,8 @@ function evaluateAnswer(isCorrect) {
   
   saveProgress(currentSubject,prog);
   if(currentSubject==="chinese"&&currentCase.hanzi){ hanziChar.textContent=currentCase.hanzi; hanziPinyin.textContent=currentCase.pinyinDisplay; hanziBox.classList.remove('hidden'); }
+  if(currentCase.explanation) explanationBox.classList.remove('hidden');
+  else explanationBox.classList.add('hidden');
   feedbackModal.classList.remove('hidden');
   updateDashboard();
 }
