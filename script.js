@@ -4,7 +4,10 @@
 // ============================================================
 
 // ======================== METADATA ========================
-const subjectMeta = {
+let subjectMeta = {};
+
+// Cấu hình mặc định nếu Firebase chưa có
+const defaultSubjectMeta = {
     vietnamese: { name: "Tiếng Việt", desc: "Chính tả, từ và câu", emoji: "📝", colorClass: "card-vietnamese" },
     science: { name: "Khoa Học", desc: "Tự nhiên, môi trường", emoji: "🔬", colorClass: "card-science" },
     history: { name: "Lịch Sử - Địa Lí", desc: "Việt Nam & Thế giới", emoji: "🗺️", colorClass: "card-history" },
@@ -209,15 +212,38 @@ function seedTheoryToFirebase() {
 
 function loadTheoryDB() {
     if(!isFirebaseReady || !db) return;
-    db.collection("theory_questions").get().then(snap => {
-        if(snap.empty) {
+    
+    // Tải song song câu hỏi và cấu hình môn học
+    Promise.all([
+        db.collection("theory_questions").get(),
+        db.collection("subject_config").get()
+    ]).then(([theorySnap, configSnap]) => {
+        // Xử lý Cấu hình môn học
+        if (!configSnap.empty) {
+            configSnap.forEach(doc => {
+                subjectMeta[doc.id] = doc.data();
+            });
+        } else {
+            // Tự động seed dữ liệu mặc định lên DB nếu trống
+            subjectMeta = {...defaultSubjectMeta};
+            const batch = db.batch();
+            Object.keys(defaultSubjectMeta).forEach(key => {
+                let ref = db.collection("subject_config").doc(key);
+                batch.set(ref, defaultSubjectMeta[key]);
+            });
+            batch.commit();
+        }
+
+        // Xử lý Câu hỏi
+        if(theorySnap.empty) {
             console.log("Theory DB rỗng. Vui lòng upload dữ liệu qua admin_upload.html");
+            renderDynamicSubjects();
             return;
         }
-        snap.forEach(doc => {
+        
+        theorySnap.forEach(doc => {
             let data = doc.data();
             if(data.subject) {
-                // Tự động tạo key mới nếu gặp môn học chưa có
                 if(!DB_THEORY[data.subject]) DB_THEORY[data.subject] = [];
                 if(!sessionCompleted[data.subject]) sessionCompleted[data.subject] = [];
                 if(!sessionRetry[data.subject]) sessionRetry[data.subject] = [];
@@ -225,14 +251,17 @@ function loadTheoryDB() {
                 DB_THEORY[data.subject].push(data);
             }
         });
+        
         renderDynamicSubjects();
     });
 }
 
 function generateTheory(subj) {
-    const emojis = {science:"🔬", history:"🗺️", ethics:"🤝", informatics:"💻", english:"🔤", chinese:"🀄", vietnamese:"📝"};
+    const defaultEmojis = {science:"🔬", history:"🗺️", ethics:"🤝", informatics:"💻", english:"🔤", chinese:"🀄", vietnamese:"📝"};
+    const emojiStr = subjectMeta[subj] ? subjectMeta[subj].emoji : (defaultEmojis[subj] || "📚");
+    
     let pool = DB_THEORY[subj];
-    if(!pool || pool.length === 0) return {type:"Chưa có dữ liệu", title:"Dữ liệu trống", dialogue:"Bạn cần dùng NotebookLLM tạo câu hỏi và tải lên Firebase cho môn này nhé!", correct:"ok", visual:"⏳", emoji: emojis[subj] || "📚", subject: subj};
+    if(!pool || pool.length === 0) return {type:"Chưa có dữ liệu", title:"Dữ liệu trống", dialogue:"Bạn cần dùng NotebookLLM tạo câu hỏi và tải lên Firebase cho môn này nhé!", correct:"ok", visual:"⏳", emoji: emojiStr, subject: subj};
     
     // Lọc theo Học kỳ (hỗ trợ tương thích ngược số 1, 2, 0)
     pool = pool.filter(q => {
@@ -259,7 +288,8 @@ function generateTheory(subj) {
         available = pool;
     }
     const q = pick(available);
-    return {...q, emoji: emojis[subj] || "📚", subject: subj};
+    const emojiStr = subjectMeta[subj] ? subjectMeta[subj].emoji : "📚";
+    return {...q, emoji: emojiStr, subject: subj};
 }
 
 function renderDynamicSubjects() {

@@ -1,10 +1,10 @@
 // ⚡ CACHE VERSION - Tăng số này mỗi khi deploy code mới để xóa cache cũ
-const CACHE_NAME = 'thamtu-lop5-v19';
+const CACHE_NAME = 'thamtu-lop5-v20';
 const urlsToCache = [
   './',
   './index.html',
   './style.css',
-  './script.js?v=19',
+  './script.js?v=20',
   './manifest.json',
   'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap',
   'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
