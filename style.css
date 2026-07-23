@@ -139,7 +139,7 @@ body {
 .card-informatics { border-color: #3b82f6; } .card-informatics .sc-name { color: #3b82f6; }
 
 /* === 3. EXERCISE === */
-.exercise-wrap { max-width: 600px; margin: 0 auto; background: #fff; min-height: 100dvh; display: flex; flex-direction: column; }
+.exercise-wrap { max-width: 600px; margin: 0 auto; background: #fff; min-height: 100dvh; display: flex; flex-direction: column; width: 100%; overflow-x: hidden; }
 .ex-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: #fff; border-bottom: 1px solid var(--border); }
 .ex-subject-badge { padding: 6px 16px; border-radius: 100px; font-size: .9rem; font-weight: 700; }
 .badge-math { background: #dcfce7; color: #15803d; }
@@ -154,16 +154,16 @@ body {
 .progress-container { padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
 .progress-bar-wrap { height: 10px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
 .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--navy), var(--red)); transition: width .4s ease, background .4s; }
-.progress-stats { display: flex; justify-content: space-between; align-items: center; font-size: .8rem; font-weight: 600; color: var(--navy); }
+.progress-stats { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px; font-size: .8rem; font-weight: 600; color: var(--navy); }
 .stat-pill { background: #fff; padding: 4px 10px; border-radius: 100px; box-shadow: 0 2px 4px rgba(0,0,0,.05); }
 
-.case-box { padding: 12px 12px; position: relative; }
+.case-box { padding: 12px 12px; position: relative; margin-top: 35px; }
 .avatar-wrap { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; background: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,.1); z-index: 2; }
 .case-content { background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 20px 12px 12px; text-align: center; position: relative; }
 .case-tag { display: inline-block; background: var(--bg); color: var(--text-light); padding: 4px 12px; border-radius: 100px; font-size: .8rem; font-weight: 700; margin-bottom: 8px; }
 .case-title { font-size: 1.2rem; color: var(--navy); margin: 0 0 8px; }
 .visual-clue { margin-bottom: 8px; animation: bounce 2s infinite; }
-.case-dialogue { font-size: 1.05rem; color: var(--text); line-height: 1.5; font-weight: 600; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px dashed #cbd5e1; }
+.case-dialogue { font-size: 1.05rem; color: var(--text); line-height: 1.5; font-weight: 600; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px dashed #cbd5e1; word-break: break-word; }
 
 .action-area { padding: 12px; background: var(--bg); border-top-left-radius: 20px; border-top-right-radius: 20px; margin-top: auto; box-shadow: 0 -4px 20px rgba(0,0,0,.05); }
 
@@ -188,7 +188,7 @@ body {
 .answer-form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;}
 .answer-form label { font-weight: 700; color: var(--navy); font-size: .9rem; margin-left: 4px; }
 .input-group { display: flex; gap: 8px; }
-.input-group input { flex: 1; padding: 16px; border-radius: 16px; border: 2px solid var(--border); font-size: 1.1rem; font-family: inherit; transition: border-color .2s; background: #fff; }
+.input-group input { flex: 1; min-width: 0; padding: 16px; border-radius: 16px; border: 2px solid var(--border); font-size: 1.1rem; font-family: inherit; transition: border-color .2s; background: #fff; }
 .input-group input:focus { outline: 0; border-color: var(--navy); }
 .hint-display { font-size: .9rem; color: var(--navy); font-weight: 600; text-align: center; min-height: 20px; margin-top: 4px; }
 
