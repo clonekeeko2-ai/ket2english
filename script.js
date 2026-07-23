@@ -57,119 +57,102 @@ function generateChinese(){
   };
 }
 
-// 3. MATH GRADE 5 (Advanced)
+// 3. MATH GRADE 5 (Advanced Procedural Generator)
 function generateMath(category) {
-    let T = [];
-    if (category === "decimals" || category === "all") {
-        const x = round(randInt(10, 50) + Math.random(), 2);
-        const y = round(randInt(5, 20) + Math.random(), 2);
-        const sum = round(x + y, 2);
-        T.push({type:"Tìm X",title:"Số thập phân",dialogue:`Tìm X biết: X + ${y} = ${sum}`,correct:String(x),explanation:`X = ${sum} - ${y} = ${x}`,visual:"✖️"});
-        
-        const a = round(randInt(2, 9) + Math.random(), 1);
-        const b = randInt(2, 8);
-        const prod = round(a * b, 1);
-        T.push({type:"Tìm X",title:"Phép Nhân",dialogue:`Tìm X biết: X × ${b} = ${prod}`,correct:String(a),explanation:`X = ${prod} ÷ ${b} = ${a}`,visual:"✖️"});
-    }
-    if (category === "fractions" || category === "all") {
-        const d1 = pick([2, 3, 4, 5]);
-        const d2 = pick([2, 3, 4, 5].filter(v => v !== d1));
-        const lcd = d1 * d2;
-        const n1 = randInt(1, d1-1);
-        const n2 = randInt(1, d2-1);
-        const nSum = (n1 * d2) + (n2 * d1);
-        T.push({type:"Phân số",title:"Cộng Khác Mẫu",dialogue:`Tính và ghi tử số của kết quả (chưa rút gọn): ${n1}/${d1} + ${n2}/${d2} = ?/${lcd}`,correct:String(nSum),explanation:`Quy đồng mẫu số chung là ${lcd}. Tử số: ${n1}×${d2} + ${n2}×${d1} = ${nSum}`,visual:"🍕"});
-        
-        const whole = randInt(1, 5);
-        const num = randInt(1, 3);
-        const den = randInt(4, 7);
-        T.push({type:"Hỗn số",title:"Chuyển đổi",dialogue:`Đổi hỗn số ${whole} và ${num}/${den} ra phân số (Ví dụ gõ: 13/4)`,correct:`${whole*den+num}/${den}`,explanation:`Tử số = phần nguyên × mẫu + tử = ${whole}×${den}+${num} = ${whole*den+num}. Mẫu giữ nguyên.`,visual:"🍕"});
-    }
-    if (category === "geometry_flat" || category === "all") {
-        const a = randInt(10, 30);
-        const b = randInt(5, a-1);
-        const h = randInt(5, 20);
-        const areaTrap = ((a + b) * h) / 2;
-        if (Number.isInteger(areaTrap)) {
-             T.push({type:"Hình thang",title:"Diện Tích",dialogue:`Một mảnh đất hình thang có đáy lớn ${a}m, đáy bé ${b}m, chiều cao ${h}m. Diện tích là ______ m²`,correct:String(areaTrap),explanation:`Diện tích = (đáy lớn + đáy bé) × chiều cao ÷ 2 = (${a} + ${b}) × ${h} ÷ 2 = ${areaTrap} m²`,visual:"📐"});
-        }
-
-        const r = pick([1, 2, 3, 4, 5, 10]);
-        const areaCircle = round(r * r * 3.14, 2);
-        T.push({type:"Hình tròn",title:"Diện Tích",dialogue:`Tính diện tích hình tròn bán kính r = ${r}cm (Lấy số pi = 3.14). Đáp số: ______ cm²`,correct:String(areaCircle),explanation:`Diện tích = r × r × 3.14 = ${r} × ${r} × 3.14 = ${areaCircle} cm²`,visual:"⭕"});
-    }
-    if (category === "units" || category === "all") {
-        const m = randInt(2, 9);
-        const cm = randInt(1, 99);
-        T.push({type:"Đổi Đơn Vị",title:"Độ Dài Hỗn Hợp",dialogue:`Đổi ${m}m ${cm}cm = ______ cm`,correct:String(m*100 + cm),explanation:`1m = 100cm. ${m}m ${cm}cm = ${m*100} + ${cm} = ${m*100 + cm}cm`,visual:"📏"});
-        
-        const kg = randInt(1, 9);
-        const g = randInt(10, 990);
-        T.push({type:"Đổi Đơn Vị",title:"Khối Lượng",dialogue:`Đổi ${kg}kg ${g}g = ______ kg (Viết dạng số thập phân)`,correct:String(kg + g/1000),explanation:`1kg = 1000g. ${g}g = ${g/1000}kg. Tổng: ${kg + g/1000}kg`,visual:"⚖️"});
-
-        const m2 = randInt(1, 15);
-        const dm2 = randInt(5, 99);
-        T.push({type:"Đổi Đơn Vị",title:"Diện Tích",dialogue:`Đổi ${m2}m² ${dm2}dm² = ______ dm²`,correct:String(m2*100 + dm2),explanation:`1m² = 100dm². Vậy ${m2}m² = ${m2*100}dm². Tổng = ${m2*100 + dm2}dm²`,visual:"🟩"});
-    }
-
-    if (category === "motion" || category === "all") {
-        const v = randInt(30, 60); // km/h
-        const t = pick([2, 3, 4, 1.5, 2.5]); // hours
-        const s = v * t;
-        T.push({type:"Chuyển động",title:"Quãng đường",dialogue:`Ô tô đi với vận tốc ${v} km/h trong ${t} giờ. Quãng đường đi được là ______ km`,correct:String(s),explanation:`Quãng đường = Vận tốc × Thời gian = ${v} × ${t} = ${s} km`,visual:"🚗"});
-        
-        const s2 = pick([120, 150, 200, 240]);
-        const v2 = pick([40, 50, 60]);
-        const t2 = round(s2 / v2, 2);
-        if (Number.isInteger(s2/v2) || (s2*10/v2)%5===0) {
-            T.push({type:"Chuyển động",title:"Thời gian",dialogue:`Xe máy đi quãng đường ${s2} km với vận tốc ${v2} km/h. Thời gian đi là ______ giờ`,correct:String(t2),explanation:`Thời gian = Quãng đường ÷ Vận tốc = ${s2} ÷ ${v2} = ${t2} giờ`,visual:"🏍️"});
-        }
-    }
-
-    if (category === "percentage" || category === "all") {
-        const total = pick([100, 200, 500, 1000]);
-        const pct = pick([10, 15, 20, 25, 50]);
-        const val = (total * pct) / 100;
-        T.push({type:"Tỉ số phần trăm",title:"Tính phần trăm",dialogue:`Tìm ${pct}% của ${total} kg. Đáp án là ______ kg`,correct:String(val),explanation:`${pct}% của ${total} = ${total} × ${pct} ÷ 100 = ${val}`,visual:"📊"});
-        
-        const price = pick([100000, 200000, 500000]);
-        const discount = pick([10, 20, 50]);
-        const finalPrice = price - (price * discount) / 100;
-        T.push({type:"Tỉ số phần trăm",title:"Giảm giá",dialogue:`Một món đồ chơi giá ${price} đồng, được giảm giá ${discount}%. Số tiền phải trả là ______ đồng`,correct:String(finalPrice),explanation:`Số tiền được giảm: ${price} × ${discount} ÷ 100 = ${price*discount/100}. Số tiền phải trả: ${price} - ${price*discount/100} = ${finalPrice}`,visual:"🏷️"});
-    }
-
-    if (category === "word_problems" || category === "all") {
-        const sum = pick([100, 150, 200, 250, 400]);
-        const diff = pick([20, 30, 40, 50, 100]);
-        if (sum > diff) {
-            const big = (sum + diff) / 2;
-            const small = (sum - diff) / 2;
-            T.push({
-                type:"Tổng - Hiệu", title:"Bài toán 2 đáp số", 
-                dialogue:`Trường tổ chức trồng cây. Lớp 5A và 5B trồng được tổng cộng ${sum} cây. Lớp 5A trồng nhiều hơn lớp 5B ${diff} cây. Hỏi mỗi lớp trồng được bao nhiêu cây?`,
-                options: [`5A: ${big} cây, 5B: ${small} cây`, `5A: ${small} cây, 5B: ${big} cây`, `5A: ${big+10} cây, 5B: ${small-10} cây`, `5A: ${sum} cây, 5B: ${diff} cây`],
-                correct:`5A: ${big} cây, 5B: ${small} cây`, 
-                explanation:`Số cây 5A (số lớn) = (Tổng + Hiệu) ÷ 2 = (${sum} + ${diff}) ÷ 2 = ${big}. Số cây 5B = ${sum} - ${big} = ${small}.`, 
-                visual:"🌳"
-            });
-        }
-        
-        const small2 = pick([10, 12, 15, 20]);
-        const ratio = pick([3, 4, 5]);
-        const big2 = small2 * ratio;
-        const diff2 = big2 - small2;
-        T.push({
-            type:"Hiệu - Tỉ", title:"Tính Tuổi", 
-            dialogue:`Hiện nay mẹ hơn con ${diff2} tuổi. Biết rằng tuổi mẹ gấp ${ratio} lần tuổi con. Hỏi hiện nay mẹ và con bao nhiêu tuổi?`,
-            options: [`Mẹ: ${big2} tuổi, Con: ${small2} tuổi`, `Mẹ: ${big2-2} tuổi, Con: ${small2+2} tuổi`, `Mẹ: ${big2+5} tuổi, Con: ${small2+5} tuổi`, `Mẹ: ${diff2} tuổi, Con: ${ratio} tuổi`],
-            correct:`Mẹ: ${big2} tuổi, Con: ${small2} tuổi`, 
-            explanation:`Hiệu số phần bằng nhau là ${ratio} - 1 = ${ratio-1} (phần). Tuổi con = ${diff2} ÷ ${ratio-1} = ${small2} tuổi. Tuổi mẹ = ${small2} × ${ratio} = ${big2} tuổi.`, 
-            visual:"👩‍👧"
-        });
+    if (category === "all") {
+        const cats = ["fractions", "decimals", "percentage", "motion", "geometry_flat", "units", "word_problems"];
+        category = pick(cats);
     }
     
-    if(T.length === 0) T.push({type:"Đại số",title:"Phép tính",dialogue:"1 + 1 = ?",correct:"2",explanation:"Cơ bản",visual:"🔢"});
-    return {...pick(T), emoji: "🔢", subject: "math"};
+    let q = { visual: "🔢", emoji: "🔢", subject: "math", options: [] };
+
+    switch(category) {
+        case "fractions":
+            const d1 = pick([2,3,4,5]); const d2 = pick([2,3,4,5].filter(x=>x!==d1));
+            const n1 = randInt(1, d1-1); const n2 = randInt(1, d2-1);
+            q.type = "Phân Số"; q.title = "Cộng Phân Số";
+            q.dialogue = `${n1}/${d1} + ${n2}/${d2} bằng bao nhiêu?`;
+            let num = n1*d2 + n2*d1; let den = d1*d2;
+            let gcd = (a, b) => b ? gcd(b, a % b) : a;
+            let g = gcd(num, den); num /= g; den /= g;
+            q.correct = den === 1 ? `${num}` : `${num}/${den}`;
+            q.options = [q.correct, `${n1+n2}/${d1+d2}`, `${num+1}/${den}`, `${num}/${den+1}`];
+            q.explanation = `Quy đồng: (${n1}×${d2})/${d1*d2} + (${n2}×${d1})/${d1*d2} = ${n1*d2+n2*d1}/${d1*d2}. Rút gọn: ${q.correct}.`;
+            q.visual = "🍕";
+            q.id = `math_frac_${n1}_${d1}_${n2}_${d2}`;
+            break;
+        case "decimals":
+            const x = randInt(10, 99) / 10; const y = randInt(10, 99) / 10;
+            q.type = "Số Thập Phân"; q.title = "Phép Cộng";
+            q.dialogue = `${x} + ${y} bằng bao nhiêu?`;
+            q.correct = ((x*10 + y*10)/10).toString();
+            q.options = [q.correct, ((x*10 + y*10 + 10)/10).toString(), ((x*10 + y*10 - 10)/10).toString(), ((x*10 + y*10 + 1)/10).toString()];
+            q.explanation = `${x} + ${y} = ${q.correct}. Nhớ đặt thẳng dấu phẩy!`;
+            q.id = `math_dec_${x}_${y}`;
+            break;
+        case "percentage":
+            const price = pick([100, 200, 500]) * 1000;
+            const discount = pick([10, 20, 25, 50]);
+            q.type = "Tỉ Số Phần Trăm"; q.title = "Giảm Giá";
+            q.dialogue = `Đồ chơi giá ${price.toLocaleString('vi-VN')}đ, giảm ${discount}%. Cần trả bao nhiêu?`;
+            const finalP = price * (100 - discount) / 100;
+            q.correct = `${finalP.toLocaleString('vi-VN')}đ`;
+            q.options = [q.correct, `${(price - discount).toLocaleString('vi-VN')}đ`, `${(price * discount / 100).toLocaleString('vi-VN')}đ`, `${(finalP - 10000).toLocaleString('vi-VN')}đ`];
+            q.explanation = `Số tiền giảm là ${discount}% của ${price} = ${price * discount / 100}. Số tiền trả = Giá gốc - Tiền giảm = ${q.correct}.`;
+            q.visual = "📊";
+            q.id = `math_perc_${price}_${discount}`;
+            break;
+        case "motion":
+            const v = randInt(30, 60); const t = pick([2, 3, 4]);
+            q.type = "Chuyển Động"; q.title = "Tính Quãng Đường";
+            q.dialogue = `Ô tô đi với vận tốc ${v}km/h trong ${t} giờ. Quãng đường dài bao nhiêu?`;
+            q.correct = `${v * t}km`;
+            q.options = [q.correct, `${v + t}km`, `${v * t + 10}km`, `${v * t - 10}km`];
+            q.explanation = `Quãng đường (s) = Vận tốc (v) × Thời gian (t) = ${v} × ${t} = ${q.correct}.`;
+            q.visual = "🚗";
+            q.id = `math_mot_${v}_${t}`;
+            break;
+        case "geometry_flat":
+            const base = randInt(5, 15); const height = randInt(5, 15);
+            q.type = "Hình Học Phẳng"; q.title = "Tam Giác";
+            q.dialogue = `Tam giác có đáy ${base}cm, chiều cao ${height}cm. Diện tích là?`;
+            const area = (base * height) / 2;
+            q.correct = `${area}cm²`;
+            q.options = [q.correct, `${base * height}cm²`, `${area + 5}cm²`, `${base + height}cm²`];
+            q.explanation = `Diện tích tam giác = (Đáy × Cao) ÷ 2 = (${base} × ${height}) ÷ 2 = ${q.correct}.`;
+            q.visual = "📐";
+            q.id = `math_geo_${base}_${height}`;
+            break;
+        case "units":
+            const m = randInt(2, 9); const cm = randInt(1, 99);
+            q.type = "Đổi Đơn Vị"; q.title = "Độ Dài";
+            q.dialogue = `${m}m ${cm}cm = ... cm?`;
+            q.correct = `${m * 100 + cm}cm`;
+            q.options = [q.correct, `${m * 10 + cm}cm`, `${m + cm}cm`, `${m * 1000 + cm}cm`];
+            q.explanation = `1m = 100cm. Nên ${m}m = ${m*100}cm. Tổng = ${m*100} + ${cm} = ${q.correct}.`;
+            q.visual = "⚖️";
+            q.id = `math_unit_${m}_${cm}`;
+            break;
+        case "word_problems":
+            const sum = randInt(30, 50); const diff = randInt(4, 10);
+            const adjSum = (sum + diff) % 2 !== 0 ? sum + 1 : sum; // Ensure even
+            const big = (adjSum + diff) / 2; const small = (adjSum - diff) / 2;
+            q.type = "Toán Lời Văn"; q.title = "Tổng - Hiệu";
+            q.dialogue = `Hai anh em có ${adjSum} viên bi. Anh nhiều hơn em ${diff} viên. Hỏi anh có bao nhiêu viên?`;
+            q.correct = `${big} viên`;
+            q.options = [q.correct, `${small} viên`, `${big + diff} viên`, `${adjSum} viên`];
+            q.explanation = `Số của anh (Số lớn) = (Tổng + Hiệu) ÷ 2 = (${adjSum} + ${diff}) ÷ 2 = ${q.correct}.`;
+            q.visual = "📚";
+            q.id = `math_wp_${adjSum}_${diff}`;
+            break;
+    }
+    
+    // Đảm bảo đáp án là duy nhất, bù thêm nếu trùng
+    q.options = Array.from(new Set(q.options));
+    while(q.options.length < 4) q.options.push(q.correct + " " + randInt(1,9)); 
+    q.options.sort(() => Math.random() - 0.5); // Xáo trộn đáp án
+    
+    return q;
 }
 
 // 4. VIETNAMESE
@@ -184,31 +167,74 @@ function generateVietnamese() {
 }
 
 // 5. STATIC THEORY DATABASES (Science, History, Ethics, Informatics)
-const DB_THEORY = {
-    science: [
-        {type:"Sinh Học", title:"Sự sinh sản", dialogue:"Động vật nào sau đây đẻ trứng?", options:["Chó","Mèo","Gà","Bò"], correct:"Gà", explanation:"Gà đẻ trứng, các loài kia đẻ con.", visual:"🥚"},
-        {type:"Vật Chất", title:"Trạng thái", dialogue:"Nước ở nhiệt độ dưới 0°C tồn tại ở thể gì?", options:["Thể lỏng","Thể khí","Thể rắn","Không xác định"], correct:"Thể rắn", explanation:"Dưới 0°C nước đóng băng thành đá (thể rắn).", visual:"🧊"},
-        {type:"Môi trường", title:"Tái chế", dialogue:"Loại rác nào sau đây có thể tái chế?", options:["Túi nilon rách","Vỏ hộp sữa giấy","Đồ gốm vỡ","Khẩu trang y tế"], correct:"Vỏ hộp sữa giấy", explanation:"Vỏ hộp giấy có thể tái chế.", visual:"♻️"}
-    ],
-    history: [
-        {type:"Lịch Sử VN", title:"Quốc khánh", dialogue:"Bác Hồ đọc Tuyên ngôn Độc lập vào năm nào?", options:["1930","1945","1954","1975"], correct:"1945", explanation:"Ngày 2/9/1945 tại Quảng trường Ba Đình.", visual:"🇻🇳"},
-        {type:"Lịch Sử VN", title:"Chiến thắng", dialogue:"Chiến dịch Điện Biên Phủ kết thúc vào năm nào?", correct:"1954", explanation:"Chiến thắng ĐBP chấn động địa cầu năm 1954.", visual:"⚔️"},
-        {type:"Địa Lí", title:"Châu lục", dialogue:"Đất nước Việt Nam nằm ở châu lục nào?", options:["Châu Âu","Châu Úc","Châu Á","Châu Phi"], correct:"Châu Á", explanation:"VN nằm ở Châu Á.", visual:"🌏"}
-    ],
-    ethics: [
-        {type:"Giao Tiếp", title:"Ứng xử", dialogue:"Khi gặp người lớn tuổi, em nên làm gì?", options:["Làm ngơ đi qua","Gật đầu nhẹ","Khoanh tay chào hỏi","Trốn đi chỗ khác"], correct:"Khoanh tay chào hỏi", explanation:"Khoanh tay chào hỏi thể hiện sự lễ phép.", visual:"🤝"},
-        {type:"Môi Trường", title:"Bảo vệ", dialogue:"Hành động nào bảo vệ môi trường?", options:["Vứt rác xuống sông","Tái sử dụng túi nilon","Đốt nilon","Hái hoa công viên"], correct:"Tái sử dụng túi nilon", explanation:"Tái sử dụng giúp giảm thiểu lượng rác.", visual:"🌱"}
-    ],
-    informatics: [
-        {type:"Phần cứng", title:"Thiết bị", dialogue:"Thiết bị nào dùng để nhập chữ vào máy tính?", options:["Màn hình","Chuột","Bàn phím","Loa"], correct:"Bàn phím", explanation:"Bàn phím (Keyboard) dùng để gõ chữ.", visual:"⌨️"},
-        {type:"An toàn mạng", title:"Bảo mật", dialogue:"Mật khẩu nào sau đây an toàn nhất?", options:["123456","password","Abc@2024!","hoang123"], correct:"Abc@2024!", explanation:"Mật khẩu an toàn cần có chữ hoa, chữ thường, số và ký tự đặc biệt.", visual:"🔒"}
-    ]
-};
+// ======================== STATE MANAGEMENT & THEORY DB ========================
+let sessionCompleted = { math: [], science: [], history: [], ethics: [], informatics: [], english: [], chinese: [], vietnamese: [] };
+let sessionRetry = { math: [], science: [], history: [], ethics: [], informatics: [], english: [], chinese: [], vietnamese: [] };
+
+let DB_THEORY = { science: [], history: [], ethics: [], informatics: [], english: [], chinese: [], vietnamese: [] };
+
+function seedTheoryToFirebase() {
+    if(!isFirebaseReady || !db) return;
+    const initialData = [
+        {subject: "science", type:"Sinh Học", title:"Sự sinh sản", dialogue:"Động vật nào sau đây đẻ trứng?", options:["Chó","Mèo","Gà","Bò"], correct:"Gà", explanation:"Gà đẻ trứng, các loài kia đẻ con.", visual:"🥚"},
+        {subject: "science", type:"Vật Chất", title:"Trạng thái", dialogue:"Nước ở nhiệt độ dưới 0°C tồn tại ở thể gì?", options:["Thể lỏng","Thể khí","Thể rắn","Không xác định"], correct:"Thể rắn", explanation:"Dưới 0°C nước đóng băng thành đá (thể rắn).", visual:"🧊"},
+        {subject: "science", type:"Môi trường", title:"Tái chế", dialogue:"Loại rác nào sau đây có thể tái chế?", options:["Túi nilon rách","Vỏ hộp sữa giấy","Đồ gốm vỡ","Khẩu trang y tế"], correct:"Vỏ hộp sữa giấy", explanation:"Vỏ hộp giấy có thể tái chế.", visual:"♻️"},
+        {subject: "history", type:"Lịch Sử VN", title:"Quốc khánh", dialogue:"Bác Hồ đọc Tuyên ngôn Độc lập vào năm nào?", options:["1930","1945","1954","1975"], correct:"1945", explanation:"Ngày 2/9/1945 tại Quảng trường Ba Đình.", visual:"🇻🇳"},
+        {subject: "history", type:"Lịch Sử VN", title:"Chiến thắng", dialogue:"Chiến dịch Điện Biên Phủ kết thúc vào năm nào?", options:["1930","1945","1954","1975"], correct:"1954", explanation:"Chiến thắng ĐBP chấn động địa cầu năm 1954.", visual:"⚔️"},
+        {subject: "history", type:"Địa Lí", title:"Châu lục", dialogue:"Đất nước Việt Nam nằm ở châu lục nào?", options:["Châu Âu","Châu Úc","Châu Á","Châu Phi"], correct:"Châu Á", explanation:"VN nằm ở Châu Á.", visual:"🌏"},
+        {subject: "ethics", type:"Giao Tiếp", title:"Ứng xử", dialogue:"Khi gặp người lớn tuổi, em nên làm gì?", options:["Làm ngơ đi qua","Gật đầu nhẹ","Khoanh tay chào hỏi","Trốn đi chỗ khác"], correct:"Khoanh tay chào hỏi", explanation:"Khoanh tay chào hỏi thể hiện sự lễ phép.", visual:"🤝"},
+        {subject: "ethics", type:"Môi Trường", title:"Bảo vệ", dialogue:"Hành động nào bảo vệ môi trường?", options:["Vứt rác xuống sông","Tái sử dụng túi nilon","Đốt nilon","Hái hoa công viên"], correct:"Tái sử dụng túi nilon", explanation:"Tái sử dụng giúp giảm thiểu lượng rác.", visual:"🌱"},
+        {subject: "informatics", type:"Phần cứng", title:"Thiết bị", dialogue:"Thiết bị nào dùng để nhập chữ vào máy tính?", options:["Màn hình","Chuột","Bàn phím","Loa"], correct:"Bàn phím", explanation:"Bàn phím (Keyboard) dùng để gõ chữ.", visual:"⌨️"},
+        {subject: "informatics", type:"An toàn mạng", title:"Bảo mật", dialogue:"Mật khẩu nào sau đây an toàn nhất?", options:["123456","password","Abc@2024!","hoang123"], correct:"Abc@2024!", explanation:"Mật khẩu an toàn cần có chữ hoa, chữ thường, số và ký tự đặc biệt.", visual:"🔒"}
+    ];
+    let batch = db.batch();
+    initialData.forEach(item => {
+        let ref = db.collection("theory_questions").doc();
+        batch.set(ref, item);
+    });
+    batch.commit().then(() => console.log("Seeded theory to Firebase")).catch(e=>console.log(e));
+}
+
+function loadTheoryDB() {
+    if(!isFirebaseReady || !db) return;
+    db.collection("theory_questions").get().then(snap => {
+        if(snap.empty) { seedTheoryToFirebase(); return; }
+        snap.forEach(doc => {
+            let data = doc.data();
+            if(data.subject && DB_THEORY[data.subject]) {
+                data.id = doc.id;
+                DB_THEORY[data.subject].push(data);
+            }
+        });
+    });
+}
 
 function generateTheory(subj) {
-    const emojis = {science:"🔬", history:"🗺️", ethics:"🤝", informatics:"💻"};
-    const q = pick(DB_THEORY[subj]);
-    return {...q, emoji: emojis[subj], subject: subj};
+    const emojis = {science:"🔬", history:"🗺️", ethics:"🤝", informatics:"💻", english:"🔤", chinese:"🀄", vietnamese:"📝"};
+    let pool = DB_THEORY[subj];
+    if(!pool || pool.length === 0) return {type:"Chưa có dữ liệu", title:"Dữ liệu trống", dialogue:"Bạn cần dùng NotebookLLM tạo câu hỏi và tải lên Firebase cho môn này nhé!", correct:"ok", visual:"⏳", emoji: emojis[subj] || "📚", subject: subj};
+    
+    // Lọc theo Học kỳ
+    pool = pool.filter(q => (q.term === undefined || q.term === currentTerm));
+
+    // Lọc theo chương học
+    if (currentTheoryCategory !== "all") {
+        const filteredByChapter = pool.filter(q => q.type === currentTheoryCategory);
+        if(filteredByChapter.length > 0) {
+            pool = filteredByChapter;
+        }
+        // Nếu không có câu nào khớp (trường hợp cực hiếm), giữ nguyên pool của Học kỳ đó, không nhảy sang Học kỳ khác.
+    }
+
+    let available = pool.filter(q => !sessionCompleted[subj].includes(q.id));
+    if(available.length === 0) {
+        // Chỉ reset trạng thái "Đã làm" của các câu thuộc chương này, giữ nguyên các chương khác
+        const poolIds = pool.map(q => q.id);
+        sessionCompleted[subj] = sessionCompleted[subj].filter(id => !poolIds.includes(id));
+        available = pool;
+    }
+    const q = pick(available);
+    return {...q, emoji: emojis[subj] || "📚", subject: subj};
 }
 
 // ======================== APP STATE & FIREBASE ========================
@@ -242,6 +268,8 @@ let userProgress = {}; // Chứa toàn bộ điểm của tài khoản hiện t�
 
 let currentSubject = null; 
 let currentMathCategory = "all";
+let currentTheoryCategory = "all";
+let currentTerm = 1;
 let currentCase = null;
 let hintLevel = 0;
 let isSubmitted = false;
@@ -268,11 +296,15 @@ function saveProgress(subj,data){
   
   // Lưu lên Đám mây
   if (isFirebaseReady && currentUser) {
-      db.collection("users").doc(currentUser.uid).set({
+      let updateData = {
           [key]: data,
           email: currentUser.email,
           lastActive: new Date().toISOString()
-      }, {merge: true}).catch(err => console.log("Lỗi lưu mây:", err));
+      };
+      if(sessionCompleted[subj]) updateData[`state_${subj}_completed`] = sessionCompleted[subj];
+      if(sessionRetry[subj]) updateData[`state_${subj}_retry`] = sessionRetry[subj];
+
+      db.collection("users").doc(currentUser.uid).set(updateData, {merge: true}).catch(err => console.log("Lỗi lưu mây:", err));
   }
 }
 function getProgress(subj){return loadProgress(subj);}
@@ -280,8 +312,34 @@ function getProgress(subj){return loadProgress(subj);}
 // ======================== DOM ========================
 const $=id=>document.getElementById(id);
 
-const authScreen=$('authScreen'), authForm=$('authForm'), authEmail=$('authEmail'), authPassword=$('authPassword'), authError=$('authError'), userProfileBadge=$('userProfileBadge'), logoutBtn=$('logoutBtn'), guestLeaderboardBtn=$('guestLeaderboardBtn');
-const welcomeScreen=$('welcomeScreen'), subjectScreen=$('subjectScreen'), mathCategoryScreen=$('mathCategoryScreen'), exerciseScreen=$('exerciseScreen'), rewardScreen=$('rewardScreen'), leaderboardScreen=$('leaderboardScreen');
+const authScreen=$('authScreen'), authForm=$('authForm'), authEmail=$('authEmail'), authPassword=$('authPassword'), authError=$('authError'), userProfileBadge=$('userProfileBadge'), logoutBtn=$('logoutBtn'), guestLeaderboardBtn=$('guestLeaderboardBtn'), forgotPasswordBtn=$('forgotPasswordBtn');
+const welcomeScreen=$('welcomeScreen'), subjectScreen=$('subjectScreen'), mathCategoryScreen=$('mathCategoryScreen'), theoryCategoryScreen=$('theoryCategoryScreen'), exerciseScreen=$('exerciseScreen'), rewardScreen=$('rewardScreen'), leaderboardScreen=$('leaderboardScreen');
+
+// ======================== SOUND EFFECTS ========================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(type) {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    if (type === 'correct') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(100, audioCtx.currentTime + 0.2);
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+    }
+}
 
 const pointsDisplay=$('pointsDisplay'), badgesDisplay=$('badgesDisplay'), rankDisplay=$('rankDisplay'), progressBar=$('progressBar'), progressPercent=$('progressPercent');
 const exVisual=$('exVisual'), exVisualEmoji=$('exVisualEmoji'), exAvatar=$('exAvatar'), caseType=$('caseType'), caseTitle=$('caseTitle'), caseDialogue=$('caseDialogue'), speechBtn=$('speechBtn');
@@ -292,7 +350,7 @@ const feedbackBox=$('feedbackBox'), feedbackText=$('feedbackText'), explanationB
 
 // ======================== NAVIGATION ========================
 function showScreen(screen){
-  [authScreen,welcomeScreen,subjectScreen,mathCategoryScreen,exerciseScreen,rewardScreen,leaderboardScreen].forEach(s=>s&&s.classList.add('hidden'));
+  [authScreen,welcomeScreen,subjectScreen,mathCategoryScreen,theoryCategoryScreen,exerciseScreen,rewardScreen,leaderboardScreen].forEach(s=>s&&s.classList.add('hidden'));
   if(screen) screen.classList.remove('hidden');
 }
 
@@ -304,9 +362,16 @@ if (isFirebaseReady) {
             userProfileBadge.textContent = "Thám tử: " + user.email.split('@')[0];
             // Tải dữ liệu từ mây về
             db.collection("users").doc(user.uid).get().then(doc => {
-                if(doc.exists) userProgress = doc.data();
+                if(doc.exists) {
+                    userProgress = doc.data();
+                    ["math", "science", "history", "ethics", "informatics", "english", "chinese", "vietnamese"].forEach(s => {
+                        if(userProgress[`state_${s}_completed`]) sessionCompleted[s] = userProgress[`state_${s}_completed`];
+                        if(userProgress[`state_${s}_retry`]) sessionRetry[s] = userProgress[`state_${s}_retry`];
+                    });
+                }
+                loadTheoryDB();
                 showScreen(welcomeScreen);
-            }).catch(e => showScreen(welcomeScreen));
+            }).catch(e => { loadTheoryDB(); showScreen(welcomeScreen); });
         } else {
             currentUser = null;
             userProgress = {};
@@ -323,8 +388,6 @@ if (isFirebaseReady) {
         // Thử đăng nhập
         auth.signInWithEmailAndPassword(email, pass)
             .catch(error => {
-                // Do Firebase mới bật bảo mật chống dò email, nó sẽ không báo lỗi 'user-not-found' nữa.
-                // Nên ta sẽ thử Đăng ký mới luôn. Nếu thất bại vì 'email-already-in-use' thì chứng tỏ là sai mật khẩu.
                 auth.createUserWithEmailAndPassword(email, pass)
                     .catch(err => {
                         if (err.code === 'auth/email-already-in-use') {
@@ -336,6 +399,29 @@ if (isFirebaseReady) {
                     });
             });
     });
+    
+    if(forgotPasswordBtn) {
+        forgotPasswordBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = authEmail.value.trim();
+            if(!email) {
+                authError.textContent = "Vui lòng nhập Email vào ô trên để lấy lại mật khẩu!";
+                authError.classList.remove('hidden');
+                return;
+            }
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    authError.textContent = "Đã gửi email khôi phục. Vui lòng kiểm tra hộp thư!";
+                    authError.style.color = "var(--green)";
+                    authError.classList.remove('hidden');
+                })
+                .catch((error) => {
+                    authError.textContent = "Lỗi: " + error.message;
+                    authError.style.color = "var(--red)";
+                    authError.classList.remove('hidden');
+                });
+        });
+    }
 } else {
     // Chạy Offline Mode nếu chưa có mã Firebase
     showScreen(authScreen);
@@ -452,12 +538,81 @@ function updateSubjectProgress(){
 $('startBtn').addEventListener('click',()=>{ updateSubjectProgress(); showScreen(subjectScreen); });
 $('backToWelcome').addEventListener('click',()=>showScreen(welcomeScreen));
 
-document.querySelectorAll('.subject-screen:not(#mathCategoryScreen) .subject-card').forEach(card=>{
+document.querySelectorAll('.subject-screen:not(#mathCategoryScreen):not(#theoryCategoryScreen) .subject-card').forEach(card=>{
   card.addEventListener('click',()=>{
     currentSubject=card.dataset.subject;
     if(currentSubject === "math") showScreen(mathCategoryScreen);
-    else startExercise();
+    else {
+        buildTheoryCategoryScreen(currentSubject);
+        showScreen(theoryCategoryScreen);
+    }
   });
+});
+
+function buildTheoryCategoryScreen(subj) {
+    const grid = $('theoryCategoryGrid');
+    grid.innerHTML = '';
+    
+    // Nút "Tất cả các chương"
+    const allBtn = document.createElement('button');
+    allBtn.className = `subject-card card-${subj}`;
+    allBtn.innerHTML = `
+        <span class="sc-emoji">📚</span>
+        <div class="card-content">
+            <span class="sc-name">Tổng Hợp HK${currentTerm}</span>
+            <span class="sc-desc">Ôn tập tất cả</span>
+        </div>
+    `;
+    allBtn.onclick = () => { currentTheoryCategory = "all"; startExercise(); };
+    grid.appendChild(allBtn);
+
+    // Render động các chương từ DB theo currentTerm
+    const rawPool = DB_THEORY[subj] || [];
+    const pool = rawPool.filter(q => (q.term === undefined || q.term === currentTerm));
+    let types = [...new Set(pool.map(q => q.type))].filter(t => t);
+    
+    // Thuật toán sắp xếp thông minh (Natural Sort & Ưu tiên Ôn tập xếp cuối)
+    types.sort((a, b) => {
+        const aLower = a.toLowerCase();
+        const bLower = b.toLowerCase();
+        const isReviewA = aLower.includes("ôn tập") || aLower.includes("đánh giá");
+        const isReviewB = bLower.includes("ôn tập") || bLower.includes("đánh giá");
+        
+        if (isReviewA && !isReviewB) return 1; // A là ôn tập thì đẩy xuống dưới
+        if (!isReviewA && isReviewB) return -1; // B là ôn tập thì đẩy xuống dưới
+        
+        // Sắp xếp theo số học (để Bài 2 đứng trước Bài 10)
+        return a.localeCompare(b, 'vi', { numeric: true, sensitivity: 'base' });
+    });
+    
+    types.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = `subject-card card-${subj}`;
+        btn.innerHTML = `
+            <span class="sc-emoji">📖</span>
+            <div class="card-content">
+                <span class="sc-name">${t}</span>
+                <span class="sc-desc">Luyện tập</span>
+            </div>
+        `;
+        btn.onclick = () => { currentTheoryCategory = t; startExercise(); };
+        grid.appendChild(btn);
+    });
+}
+
+// Logic cho Tab Học Kỳ
+$('tabTerm1').addEventListener('click', () => {
+    currentTerm = 1;
+    $('tabTerm1').classList.add('active');
+    $('tabTerm2').classList.remove('active');
+    buildTheoryCategoryScreen(currentSubject);
+});
+
+$('tabTerm2').addEventListener('click', () => {
+    currentTerm = 2;
+    $('tabTerm2').classList.add('active');
+    $('tabTerm1').classList.remove('active');
+    buildTheoryCategoryScreen(currentSubject);
 });
 
 if($('mathCategoryScreen')) {
@@ -469,6 +624,10 @@ if($('mathCategoryScreen')) {
       });
     });
     $('backToSubjectsFromMath').addEventListener('click',()=>showScreen(subjectScreen));
+}
+
+if($('backToSubjectsFromTheory')) {
+    $('backToSubjectsFromTheory').addEventListener('click',()=>showScreen(subjectScreen));
 }
 
 $('backToSubjects').addEventListener('click',()=>{ updateSubjectProgress(); showScreen(subjectScreen); });
@@ -490,11 +649,41 @@ function startExercise(){
 }
 
 function loadNewCase(){
-  if(currentSubject==="english") currentCase=generateEnglish();
-  else if(currentSubject==="math") currentCase=generateMath(currentMathCategory);
-  else if(currentSubject==="chinese") currentCase=generateChinese();
-  else if(currentSubject==="vietnamese") currentCase=generateVietnamese();
-  else currentCase=generateTheory(currentSubject);
+  currentCase = null;
+  // Hàng đợi Spaced Repetition (Tỉ lệ 30% gặp lại câu sai)
+  if(sessionRetry[currentSubject] && sessionRetry[currentSubject].length > 0 && Math.random() < 0.3) {
+      if (currentSubject !== "math") { // Toán học sinh động nên bỏ qua
+          // Lọc tìm câu sai CHỈ thuộc về chương và học kỳ hiện tại
+          let validRetries = sessionRetry[currentSubject].filter(id => {
+              let q = DB_THEORY[currentSubject] && DB_THEORY[currentSubject].find(x => x.id === id);
+              if (!q) return false;
+              if (currentTheoryCategory !== "all" && q.type !== currentTheoryCategory) return false;
+              if (q.term !== undefined && q.term !== currentTerm) return false;
+              return true;
+          });
+
+          if (validRetries.length > 0) {
+              let retryId = validRetries[0];
+              // Loại bỏ câu này khỏi hàng đợi
+              sessionRetry[currentSubject] = sessionRetry[currentSubject].filter(id => id !== retryId);
+              let found = DB_THEORY[currentSubject].find(x => x.id === retryId);
+              if(found) currentCase = {...found, emoji: "🔄", subject: currentSubject, isRetry: true};
+          }
+      }
+  }
+
+  if(!currentCase || !currentCase.isRetry) {
+      if(currentSubject==="math") {
+          let maxTries = 50;
+          do {
+              currentCase = generateMath(currentMathCategory);
+              maxTries--;
+          } while(sessionCompleted["math"].includes(currentCase.id) && maxTries > 0);
+      }
+      else {
+          currentCase = generateTheory(currentSubject);
+      }
+  }
 
   hintLevel=0; isSubmitted=false; currentMCQButtons=[];
 
@@ -509,7 +698,9 @@ function loadNewCase(){
   explanationBox.classList.add('hidden'); nextActionBox.classList.add('hidden');
 
   // UI Toggle: MCQ vs Text Input
-  if(currentCase.options) {
+  const isTextInput = currentCase.questionFormat === 'text_input' || !currentCase.options;
+  
+  if(!isTextInput) {
       answerForm.classList.add('hidden'); mcqContainer.classList.remove('hidden');
       mcqGrid.innerHTML = '';
       const letters = ['A','B','C','D'];
@@ -540,14 +731,22 @@ function evaluateAnswer(isCorrect) {
   feedbackBox.classList.remove('hidden','correct','incorrect');
   
   if(isCorrect){
+    playSound('correct');
+    if (typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#22c55e', '#fbbf24', '#3b82f6'] });
+    }
     if(hintLevel >= 3 || (currentCase.options && hintLevel >= 2)) {
       feedbackBox.classList.add('correct'); feedbackText.textContent='✅ Đúng! Nhưng vì xem gợi ý nên không được cộng điểm nhé.';
+      if(currentCase.id && !sessionRetry[currentSubject].includes(currentCase.id)) sessionRetry[currentSubject].push(currentCase.id);
     } else {
       prog.points+=POINTS_PER_CORRECT; prog.correctCount+=1;
       feedbackBox.classList.add('correct'); feedbackText.textContent='✅ Xuất sắc! Thám tử quá giỏi!';
+      if(currentCase.id && !sessionCompleted[currentSubject].includes(currentCase.id)) sessionCompleted[currentSubject].push(currentCase.id);
     }
   } else {
+    playSound('wrong');
     feedbackBox.classList.add('incorrect'); feedbackText.textContent='❌ Sai rồi! Đáp án là: '+currentCase.correct;
+    if(currentCase.id && !sessionRetry[currentSubject].includes(currentCase.id)) sessionRetry[currentSubject].push(currentCase.id);
   }
   
   saveProgress(currentSubject,prog);
@@ -564,7 +763,13 @@ function handleMCQSubmit(clickedBtn, selectedOpt) {
     currentMCQButtons.forEach(b => {
         b.btn.disabled = true;
         if(b.opt === currentCase.correct) b.btn.classList.add('correct');
-        else if (b.btn === clickedBtn) b.btn.classList.add('wrong');
+        else if (b.btn === clickedBtn) {
+            b.btn.classList.add('wrong');
+            if(!isCorrect) {
+                b.btn.classList.add('shake');
+                setTimeout(() => b.btn.classList.remove('shake'), 400);
+            }
+        }
         else b.btn.classList.add('faded');
     });
     evaluateAnswer(isCorrect);
